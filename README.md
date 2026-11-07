@@ -1,0 +1,154 @@
+# X-Satz
+
+[![CI](https://github.com/adminde/X-Satz/actions/workflows/ci.yml/badge.svg)](https://github.com/adminde/X-Satz/actions/workflows/ci.yml)
+[![Licence: GPL-3.0-or-later](https://img.shields.io/badge/licence-GPL--3.0--or--later-blue.svg)](LICENSE)
+![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)
+
+**From a Dorico MusicXML export to a print-ready full score, automatically.**
+
+X-Satz was born in the Guggenmusik X-Treme, a carnival brass band. Our
+musical director writes the arrangements in Dorico. Everything after that, the full score for
+the conductor, the parts for the players, practice MIDIs and the numbers that tell brass
+players which valves or slide positions to use, used to be manual work. X-Satz takes the
+MusicXML export and produces these files on its own, with free software only.
+
+## What it does today
+
+- **Engraves a full score** from MusicXML with [MuseScore 4](https://musescore.org) on the
+  command line, in a score style that follows the Dorico original: page format, system and
+  page breaks, fonts and sizes, brackets, rehearsal marks and tempi.
+- **Keeps the playing aids:** valve combinations, slide positions and timpani sticking that
+  Dorico writes as lyrics under the notes, with their extender lines.
+- **Handles percussion kits** with several instruments, voices and noteheads per staff.
+- **Designs the title block and running header** with your band's logo and accent colour,
+  passed in as configuration, never stored in the repository.
+- **Keeps the page printable:** nothing sits closer than 5 mm to the edge of the paper.
+- **Inspects and compares:** `xsatz info` shows what a MusicXML file carries, and
+  `xsatz compare` puts the result next to a reference PDF, page by page.
+
+The original MusicXML file is never changed.
+
+## How it works
+
+MuseScore does the engraving. X-Satz works in stages around it, because some things cannot be
+expressed in a style alone:
+
+```
+MusicXML ──▶ prepare ──▶ MuseScore import ──▶ edit ──▶ MuseScore export ──▶ finish ──▶ PDF
+            (copy of the       (.mscz with       (frames       (PDF, PNG,        (logo and
+             MusicXML)         score style)      MuseScore     MIDI, ...)        header rule)
+                                                 needs)
+```
+
+A problem is solved in the earliest stage that can solve it: the style first, then the
+MusicXML, then MuseScore's own file, then the PDF. The reasons and findings behind every
+stage are recorded in [ADR 0008](docs/adr/0008-musescore-4-and-the-stages-around-it.md).
+
+## Requirements
+
+- **Python 3.11** or newer
+- **[MuseScore Studio 4](https://musescore.org/download)**. X-Satz finds it in the usual install
+  locations. Otherwise set the environment variable `MSCORE` to the MuseScore executable.
+- **The fonts in [`libs/font/`](libs/README.md)** installed on the system, so that text looks
+  like in Dorico. MuseScore brings the music font Bravura itself.
+
+X-Satz is developed on Windows, and its CI runs on Linux and Windows.
+
+## Installation
+
+```
+git clone https://github.com/adminde/X-Satz.git
+cd X-Satz
+python -m venv .venv
+.venv\Scripts\activate                # Linux/macOS: source .venv/bin/activate
+python -m pip install -e .
+xsatz doctor                          # checks Python and MuseScore
+```
+
+## Quick start
+
+```
+xsatz render march.musicxml --logo band-logo.png --color "#D6001C"
+```
+
+This writes `march.pdf` next to `march.musicxml`. Use `--out DIR` to write somewhere else.
+
+## Usage
+
+| Command | What it does |
+|---|---|
+| `xsatz doctor` | Checks the setup and the MuseScore version |
+| `xsatz info SCORE.musicxml` | Shows page layout, fonts, credits, parts, breaks and playing aids of a MusicXML file |
+| `xsatz render SCORE.musicxml` | Renders the full score as PDF |
+| `xsatz compare REFERENCE.pdf SCORE.pdf` | Compares two PDFs page by page and writes side by side and overlay images |
+
+Options of `render`:
+
+| Option | Meaning |
+|---|---|
+| `--out DIR` | Output directory, default: next to the input |
+| `--fmt FORMAT` | `pdf` (default), `png`, `mscz`, `mid`, `musicxml` and other formats MuseScore writes |
+| `--logo FILE` | Logo for title block and running header, PNG or SVG |
+| `--color #RRGGBB` | Accent colour of the header rule |
+| `--style FILE.mss` | Another MuseScore style instead of the X-Satz score style |
+| `--raw` | Renders the original exactly as MuseScore imports it, without stages and style, to see what X-Satz changes |
+
+## Configuration
+
+Values that belong to a band or a person are never part of X-Satz. Pass them on the command
+line, set them in the environment, or put them into a `.env` file in the folder you run
+`xsatz` from (start from [`.env.example`](.env.example)). Command line options win over the
+environment, and the environment wins over the `.env` file.
+
+| Variable | Option | Meaning |
+|---|---|---|
+| `XSATZ_LOGO` | `--logo` | Logo stamped into title block and running header, PNG or SVG. In an SVG, convert text to paths. Without a logo the PDF has none. |
+| `XSATZ_COLOR` | `--color` | Accent colour of the header rule as `#RRGGBB`. Without it X-Satz takes the accent colour of the logo. |
+| `MSCORE` | | Path to the MuseScore executable, when it is not found automatically |
+
+Titles and credits come from the MusicXML of the piece itself.
+
+## Contributing
+
+Contributions are welcome. Please read [AGENTS.md](AGENTS.md) first: it holds the rules for
+everyone working on X-Satz, people and coding agents alike. The most important ones:
+
+- **Never commit copyrighted scores** or anything made from them. Tests use public domain or
+  self-made files only, and a pre-commit hook refuses PDFs and score files.
+- **Everything in the repository is English.**
+- **Decisions are recorded** as [architecture decision records](docs/adr/README.md).
+
+Set up the development environment and run the gate before every pull request:
+
+```
+python -m pip install -e ".[dev]"
+pre-commit install                    # checks on every commit and push
+python tools/gates/verify.py          # pre-commit, tests and a real MuseScore render
+```
+
+The CI on GitHub runs the same gate on Linux and Windows.
+
+## Project layout
+
+```
+src/xsatz/       the Python package and its command line
+src/xsatz/styles the MuseScore score style
+docs/adr/        architecture decision records
+libs/            third-party fonts with their licences
+tests/           tests with public domain and self-made fixtures
+tools/gates/     the gate
+```
+
+## Licence
+
+X-Satz is free software under the [GNU General Public License v3.0 or later](LICENSE).
+
+The Academico font in [`libs/font/academico/`](libs/font/academico/COPYING) is © Steinberg Media
+Technologies GmbH and licensed under the SIL Open Font License 1.1. Third-party assets keep their
+own licences, listed in [libs/README.md](libs/README.md).
+
+## Acknowledgements
+
+X-Satz stands on the work of [MuseScore](https://musescore.org) for the engraving,
+[Bravura](https://github.com/steinbergmedia/bravura) and Academico by Steinberg for the fonts,
+and [PyMuPDF](https://pymupdf.readthedocs.io) for reading and finishing PDFs.

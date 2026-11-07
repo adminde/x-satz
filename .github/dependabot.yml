@@ -1,0 +1,22 @@
+# Keeps the pinned action SHAs, the pre-commit hooks and the pins in pyproject.toml up to date
+# (ADR 0006). A ruff-pre-commit update needs the ruff pin in pyproject.toml raised as well.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
+  - package-ecosystem: pre-commit
+    directory: /
+    schedule:
+      interval: monthly
+  - package-ecosystem: pip
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      python:
+        patterns: ["*"]

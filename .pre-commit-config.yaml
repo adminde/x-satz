@@ -1,0 +1,68 @@
+# Install once per clone, inside the activated virtual environment: pre-commit install
+# Runs on commit (file checks, Ruff) and on push (the whole gate, ADR 0007).
+default_install_hook_types: [pre-commit, pre-push]
+default_stages: [pre-commit]
+# No bot rewrites legal texts
+exclude: '(^|/)(LICENSE|COPYING)(\.[^/]*)?$'
+
+repos:
+  - repo: local
+    hooks:
+      - id: forbidden-files
+        name: no leftovers of merges and patches
+        entry: "leftovers of a merge or patch, remove them"
+        language: fail
+        files: '\.(rej|orig)$'
+      # ADR 0003: copyrighted scores and local data never enter the repository
+      - id: no-scores
+        name: no scores, PDFs or local data
+        entry: "copyrighted scores and local data must not be committed (ADR 0003)"
+        language: fail
+        files: '(^data/|\.(pdf|dorico|mscz|mscx|mxl|musicxml|mid|midi)$)'
+        exclude: '^tests/fixtures/'
+      # ADR 0003: local configuration and secrets stay on the machine
+      - id: no-env-files
+        name: no .env files
+        entry: ".env files must not be committed, use .env.example for documentation (ADR 0003)"
+        language: fail
+        files: '(^|/)\.env(\..+)?$'
+        exclude: '(^|/)\.env\.example$'
+
+  # Hooks that rewrite files skip the third-party assets in libs/<kind>/<name>/ (ADR 0004)
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '^libs/[^/]+/[^/]+/'
+      - id: end-of-file-fixer
+        exclude: '^libs/[^/]+/[^/]+/'
+      - id: mixed-line-ending
+        args: [--fix=lf]
+        exclude: '(\.(bat|cmd|ps1)$|^libs/[^/]+/[^/]+/)'
+      - id: check-yaml
+      - id: check-toml
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: check-executables-have-shebangs
+      - id: debug-statements
+
+  # Keep rev in step with the ruff pin in pyproject.toml
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.17.4
+    hooks:
+      - id: ruff-check
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+
+  # The gate needs the project's dependencies, so it runs in the activated virtual environment
+  - repo: local
+    hooks:
+      - id: gate
+        name: gate (tools/gates/verify.py)
+        entry: python tools/gates/verify.py
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-push]

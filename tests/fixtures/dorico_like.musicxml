@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<!-- Self-made fixture with invented values, shaped like a Dorico 5 export. -->
+<score-partwise version="4.0">
+  <work>
+    <work-title>Example March</work-title>
+  </work>
+  <movement-title>Title</movement-title>
+  <identification>
+    <creator type="composer">adapted by Nobody</creator>
+    <rights>© Example Rights</rights>
+    <encoding>
+      <software>Dorico 5.1.81.2225</software>
+      <encoding-date>2026-11-07</encoding-date>
+      <supports type="yes" element="print" attribute="new-page" value="yes"/>
+    </encoding>
+  </identification>
+  <defaults>
+    <scaling>
+      <millimeters>4.33919</millimeters>
+      <tenths>40</tenths>
+    </scaling>
+    <page-layout>
+      <page-height>1931.69</page-height>
+      <page-width>2734.94</page-width>
+    </page-layout>
+    <music-font font-family="Bravura" font-size="12.3001"/>
+    <word-font font-family="Academico" font-size="6.15004"/>
+  </defaults>
+  <credit page="1">
+    <credit-type>title</credit-type>
+    <credit-words default-x="1367" default-y="1800" font-size="20" justify="center">Example March</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>part name</credit-type>
+    <credit-words default-x="117" default-y="1700" font-size="10">Full Score</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>composer</credit-type>
+    <credit-words default-x="2617" default-y="1720" font-size="10" justify="right">adapted by Nobody</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-words default-x="2617" default-y="1690" font-size="10" justify="right">for an example band</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>arranger</credit-type>
+    <credit-words default-x="117" default-y="1650" font-size="5">arr. Somebody</credit-words>
+  </credit>
+  <credit page="1">
+    <credit-type>rights</credit-type>
+    <credit-words default-x="1367" default-y="90" font-size="8" justify="center">© Example Rights</credit-words>
+  </credit>
+  <credit page="2">
+    <credit-type>page number</credit-type>
+    <credit-words default-x="117" default-y="1850" font-size="10">2</credit-words>
+  </credit>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Trombone</part-name>
+      <part-abbreviation>Tbn.</part-abbreviation>
+    </score-part>
+    <score-part id="P2">
+      <part-name>Drum Kit</part-name>
+      <score-instrument id="P2-X1"><instrument-name>Hi-Hat</instrument-name></score-instrument>
+      <score-instrument id="P2-X2"><instrument-name>Snare Drum</instrument-name></score-instrument>
+    </score-part>
+    <score-part id="P3">
+      <part-name>Timpani</part-name>
+      <score-instrument id="P3-X1"><instrument-name>Timpani</instrument-name></score-instrument>
+    </score-part>
+  </part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key><fifths>-3</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>G</sign><line>2</line></clef>
+      </attributes>
+      <direction placement="above" directive="yes" system="only-top">
+        <direction-type>
+          <words font-family="Academico" font-size="10" justify="center" xml:space="preserve">Intro</words>
+        </direction-type>
+        <direction-type>
+          <rehearsal enclosure="circle">1  </rehearsal>
+        </direction-type>
+        <direction-type>
+          <metronome>
+            <beat-unit>quarter</beat-unit>
+            <per-minute>100</per-minute>
+          </metronome>
+        </direction-type>
+        <staff>1</staff>
+        <sound tempo="100"/>
+      </direction>
+      <note>
+        <pitch><step>E</step><alter>-1</alter><octave>4</octave></pitch>
+        <duration>4</duration>
+        <type>whole</type>
+        <lyric number="1" placement="below">
+          <syllabic>single</syllabic>
+          <text>1</text>
+        </lyric>
+      </note>
+    </measure>
+  </part>
+  <part id="P2">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key><fifths>-3</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>percussion</sign></clef>
+      </attributes>
+      <note>
+        <unpitched><display-step>G</display-step><display-octave>5</display-octave></unpitched>
+        <duration>2</duration>
+        <instrument id="P2-X1"/>
+        <voice>5</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <notehead>x</notehead>
+      </note>
+      <note>
+        <unpitched><display-step>G</display-step><display-octave>5</display-octave></unpitched>
+        <duration>2</duration>
+        <instrument id="P2-X1"/>
+        <voice>5</voice>
+        <type>half</type>
+        <stem>up</stem>
+        <notehead>circle-x</notehead>
+      </note>
+      <backup><duration>4</duration></backup>
+      <note>
+        <unpitched><display-step>C</display-step><display-octave>5</display-octave></unpitched>
+        <duration>4</duration>
+        <instrument id="P2-X2"/>
+        <voice>6</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+  </part>
+  <part id="P3">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key><fifths>-3</fifths></key>
+        <time><beats>4</beats><beat-type>4</beat-type></time>
+        <clef><sign>percussion</sign></clef>
+        <staff-details><staff-lines>1</staff-lines></staff-details>
+      </attributes>
+      <note>
+        <unpitched><display-step>E</display-step><display-octave>4</display-octave></unpitched>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <lyric number="1" placement="below"><syllabic>single</syllabic><text>R</text></lyric>
+      </note>
+    </measure>
+  </part>
+</score-partwise>

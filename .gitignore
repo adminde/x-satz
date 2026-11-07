@@ -1,0 +1,27 @@
+# Local development data: copyrighted scores and results, never committed (ADR 0003)
+data/
+
+# Local configuration and secrets (ADR 0003)
+.env
+.env.*
+!.env.example
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+
+# Tools
+tools/gates/last-run.json
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local agent and editor settings
+.claude/settings.local.json
+.vscode/
+.idea/

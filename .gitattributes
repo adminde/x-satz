@@ -1,0 +1,59 @@
+# Default: detect text and store it with LF, also on Windows with core.autocrlf=true,
+# so that Ruff, pytest, pre-commit and the CI see the same bytes everywhere.
+* text=auto eol=lf
+
+# Python
+*.py      text diff=python
+*.pyi     text diff=python
+*.toml    text
+
+# Documentation and configuration
+*.md      text diff=markdown
+*.yml     text
+*.yaml    text
+*.json    text
+*.cfg     text
+*.ini     text
+*.txt     text
+
+# Music as text: MusicXML is XML, MuseScore styles and uncompressed scores are too
+*.xml      text
+*.musicxml text
+*.mss      text
+*.mscx     text
+
+# Shell scripts always LF, Windows scripts always CRLF
+*.sh      text eol=lf
+*.bat     text eol=crlf
+*.cmd     text eol=crlf
+*.ps1     text eol=crlf
+
+# Binary: never convert, never diff line by line
+*.pdf     binary
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.webp    binary
+*.ico     binary
+*.svgz    binary
+*.ttf     binary
+*.otf     binary
+*.woff    binary
+*.woff2   binary
+*.zip     binary
+*.gz      binary
+*.whl     binary
+# Packed music formats (ZIP) and audio
+*.mxl     binary
+*.mscz    binary
+*.dorico  binary
+*.mid     binary
+*.midi    binary
+*.wav     binary
+*.mp3     binary
+*.ogg     binary
+*.flac    binary
+
+# Third-party assets (ADR 0004): byte for byte as published, shown as vendored on GitHub
+libs/*/*/** -text linguist-vendored

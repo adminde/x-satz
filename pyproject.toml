@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "xsatz"
+version = "0.1.0"
+description = "Dorico MusicXML to print-ready scores, parts, MIDIs and playing aids for the Guggenmusik X-Treme"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "GPL-3.0-or-later"
+authors = [{ name = "Guggenmusik X-Treme" }]
+dependencies = [
+    "music21>=9",
+    "pymupdf>=1.24",
+    "pillow>=10",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+# Keep the Ruff version in step with the ruff-pre-commit rev in .pre-commit-config.yaml
+dev = ["pre-commit>=4", "pytest>=8", "ruff==0.17.4"]
+
+[project.scripts]
+xsatz = "xsatz.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/xsatz"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
