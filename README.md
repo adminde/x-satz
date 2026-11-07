@@ -16,7 +16,10 @@ MusicXML export and produces these files on its own, with free software only.
 
 - **Engraves a full score** from MusicXML with [MuseScore 4](https://musescore.org) on the
   command line, in a score style that follows the Dorico original: page format, system and
-  page breaks, fonts and sizes, brackets, rehearsal marks and tempi.
+  page breaks, sizes, brackets, rehearsal marks and tempi. All text is set in EB Garamond.
+- **Engraves the parts:** one PDF per instrument, every part at the same readable staff
+  size and the same distance between the systems. Only when a third page would hold just one
+  or two systems does X-Satz move the systems a little closer, and it never shrinks the notes.
 - **Keeps the playing aids:** valve combinations, slide positions and timpani sticking that
   Dorico writes as lyrics under the notes, with their extender lines.
 - **Handles percussion kits** with several instruments, voices and noteheads per staff.
@@ -49,8 +52,8 @@ stage are recorded in [ADR 0008](docs/adr/0008-musescore-4-and-the-stages-around
 - **Python 3.11** or newer
 - **[MuseScore Studio 4](https://musescore.org/download)**. X-Satz finds it in the usual install
   locations. Otherwise set the environment variable `MSCORE` to the MuseScore executable.
-- **The fonts in [`libs/font/`](libs/README.md)** installed on the system, so that text looks
-  like in Dorico. MuseScore brings the music font Bravura itself.
+- **The fonts in [`libs/font/`](libs/README.md)** installed on the system. X-Satz sets every text
+  in EB Garamond, MuseScore brings the music font Bravura itself.
 
 X-Satz is developed on Windows, and its CI runs on Linux and Windows.
 
@@ -73,6 +76,12 @@ xsatz render march.musicxml --logo band-logo.png --color "#D6001C"
 
 This writes `march.pdf` next to `march.musicxml`. Use `--out DIR` to write somewhere else.
 
+```
+xsatz parts march.musicxml --logo band-logo.png --color "#D6001C"
+```
+
+This writes one PDF per instrument, such as `march - Trumpet 1.pdf`, next to `march.musicxml`.
+
 ## Usage
 
 | Command | What it does |
@@ -80,6 +89,7 @@ This writes `march.pdf` next to `march.musicxml`. Use `--out DIR` to write somew
 | `xsatz doctor` | Checks the setup and the MuseScore version |
 | `xsatz info SCORE.musicxml` | Shows page layout, fonts, credits, parts, breaks and playing aids of a MusicXML file |
 | `xsatz render SCORE.musicxml` | Renders the full score as PDF |
+| `xsatz parts SCORE.musicxml` | Renders one PDF per part, `SCORE - PART.pdf` |
 | `xsatz compare REFERENCE.pdf SCORE.pdf` | Compares two PDFs page by page and writes side by side and overlay images |
 
 Options of `render`:
@@ -92,6 +102,12 @@ Options of `render`:
 | `--color #RRGGBB` | Accent colour of the header rule |
 | `--style FILE.mss` | Another MuseScore style instead of the X-Satz score style |
 | `--raw` | Renders the original exactly as MuseScore imports it, without stages and style, to see what X-Satz changes |
+
+`parts` takes `--out`, `--logo` and `--color` as well. Every part is set on A4 portrait with
+a staff space of 1.75 mm and 12 staff spaces between its systems. When a third page would
+hold only one or two systems, X-Satz tries 10 and then 8 staff spaces. A part that still needs more
+than two pages is kept, and X-Satz prints a warning. The reasons are recorded in
+[ADR 0009](docs/adr/0009-parts-keep-their-staff-size-and-move-systems-closer.md).
 
 ## Configuration
 
@@ -132,7 +148,7 @@ The CI on GitHub runs the same gate on Linux and Windows.
 
 ```
 src/xsatz/       the Python package and its command line
-src/xsatz/styles the MuseScore score style
+src/xsatz/styles the MuseScore styles of score and parts
 docs/adr/        architecture decision records
 libs/            third-party fonts with their licences
 tests/           tests with public domain and self-made fixtures
@@ -144,11 +160,14 @@ tools/gates/     the gate
 X-Satz is free software under the [GNU General Public License v3.0 or later](LICENSE).
 
 The Academico font in [`libs/font/academico/`](libs/font/academico/COPYING) is © Steinberg Media
-Technologies GmbH and licensed under the SIL Open Font License 1.1. Third-party assets keep their
-own licences, listed in [libs/README.md](libs/README.md).
+Technologies GmbH and licensed under the SIL Open Font License 1.1. EB Garamond in
+[`libs/font/garamond/`](libs/font/garamond/OFL.txt) is © The EB Garamond Project Authors
+and licensed under the same licence. Third-party assets keep their own licences, listed in
+[libs/README.md](libs/README.md).
 
 ## Acknowledgements
 
 X-Satz stands on the work of [MuseScore](https://musescore.org) for the engraving,
-[Bravura](https://github.com/steinbergmedia/bravura) and Academico by Steinberg for the fonts,
+[Bravura](https://github.com/steinbergmedia/bravura) and Academico by Steinberg and
+[EB Garamond](https://github.com/octaviopardo/EBGaramond12) for the fonts,
 and [PyMuPDF](https://pymupdf.readthedocs.io) for reading and finishing PDFs.

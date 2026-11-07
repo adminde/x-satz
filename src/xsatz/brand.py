@@ -28,6 +28,8 @@ PRINT_SAFE = 5 / 25.4 * 72
 RASTER_SIDE = 1600
 # Room kept free above the next text under the title block, for the circle of a rehearsal mark.
 RULE_CLEARANCE = 3.0
+# Least room between the logo on page 1 and the title.
+LOGO_GAP = 6.0
 
 Color = tuple[float, float, float]
 
@@ -140,27 +142,33 @@ def _accent(image: Image.Image) -> tuple[float, float, float]:
     return (red, green, blue)
 
 
-def _spans(page: pymupdf.Page) -> list[dict]:
+def _spans(page: pymupdf.Page, flags: int | None = None) -> list[dict]:
+    options = {} if flags is None else {"flags": flags}
     return [
         span
-        for block in page.get_text("dict")["blocks"]
+        for block in page.get_text("dict", **options)["blocks"]
         for line in block.get("lines", [])
         for span in line["spans"]
         if span["text"].strip()
     ]
 
 
-def _title_block_rule(page: pymupdf.Page, spans: list[dict], block: set[str]) -> float | None:
+def _title_block_rule(page: pymupdf.Page, block: set[str]) -> float | None:
     """Height of a rule between the title block and what follows it, or None without room.
 
     ``block`` holds the texts of the title block besides the title. The rule sits halfway
     between the lowest of them and the highest text below, which leaves room for the circle
-    MuseScore draws around a rehearsal mark.
+    MuseScore draws around a rehearsal mark. Texts are measured by the outlines of their
+    glyphs, because the boxes of music symbols and of italic texts reach far beyond them.
     """
+    spans = _spans(page, pymupdf.TEXT_ACCURATE_BBOXES)
     title = max(spans, key=lambda s: s["size"])
     ours = [s for s in spans if s is title or s["text"].strip() in block]
     bottom = max(s["bbox"][3] for s in ours)
-    below = [s["bbox"][1] for s in spans if s not in ours and s["bbox"][1] > bottom]
+    texts = {s["text"].strip() for s in ours}
+    below = [
+        s["bbox"][1] for s in spans if s["text"].strip() not in texts and s["bbox"][1] > bottom
+    ]
     if not below:
         return None
     next_top = min(below) - RULE_CLEARANCE
@@ -200,10 +208,16 @@ def stamp_logo(
                 continue
             top, bottom = title["bbox"][1], title["bbox"][3]
             height = (bottom - top) * 1.5
+            # On a narrow page a long title leaves less room, and the logo shrinks to fit
+            # left of it.
+            room = title["bbox"][0] - margin - LOGO_GAP
+            if height * ratio > room:
+                height = room / ratio
             y = max(top - (height - (bottom - top)) / 2, PRINT_SAFE)
-            loaded.stamp(page, pymupdf.Rect(margin, y, margin + height * ratio, y + height))
+            if height > 0:
+                loaded.stamp(page, pymupdf.Rect(margin, y, margin + height * ratio, y + height))
             block = {text.strip() for text in title_block if text.strip()}
-            rule = _title_block_rule(page, spans, block) if block else None
+            rule = _title_block_rule(page, block) if block else None
             if rule is not None:
                 page.draw_line(
                     (margin, rule), (page.rect.width - margin, rule), color=accent, width=0.6

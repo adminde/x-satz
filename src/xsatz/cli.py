@@ -20,18 +20,25 @@ def _cmd_info(a: argparse.Namespace) -> int:
     return 0
 
 
+def _branding(a: argparse.Namespace) -> tuple[Path | None, tuple[float, float, float] | None]:
+    """Logo and accent colour from the options, else from the environment."""
+    from xsatz.brand import color_from_env, logo_from_env
+
+    return a.logo or logo_from_env(), a.color or color_from_env()
+
+
 def _cmd_render(a: argparse.Namespace) -> int:
-    from xsatz.brand import color_from_env, logo_from_env, stamp_logo
+    from xsatz.brand import stamp_logo
     from xsatz.render import default_style, render
 
     try:
-        color = a.color or color_from_env()
+        logo, color = _branding(a)
     except ValueError as exc:
         print(f"XSATZ_COLOR: {exc}")
         return 2
     print("MuseScore:", musescore.version())
     style = None if a.raw else (a.style or default_style())
-    logo = None if a.raw else (a.logo or logo_from_env())
+    logo = None if a.raw else logo
     failed = 0
     for f in a.files:
         res = render(f, a.out, a.fmt, style, prepared=not a.raw)
@@ -53,6 +60,45 @@ def _cmd_render(a: argparse.Namespace) -> int:
         else:
             failed += 1
             print(f"FAIL  {res.source.name}\n{res.log}")
+    return 1 if failed else 0
+
+
+def _cmd_parts(a: argparse.Namespace) -> int:
+    from xsatz.brand import stamp_logo
+    from xsatz.parts import MAX_PAGES, render_parts
+
+    try:
+        logo, color = _branding(a)
+    except ValueError as exc:
+        print(f"XSATZ_COLOR: {exc}")
+        return 2
+    print("MuseScore:", musescore.version())
+    failed = 0
+    for f in a.files:
+        res = render_parts(f, a.out)
+        if not res.ok:
+            failed += 1
+            print(f"FAIL  {res.source.name}\n{res.log}")
+            continue
+        lines = res.prepared.titles.lines if res.prepared else []
+        print(f"OK    {res.source.name}: {len(res.parts)} parts")
+        for part in res.parts:
+            print(
+                f"      {part.output}: {part.pages} pages, "
+                f"system distance {part.system_distance:g} sp"
+            )
+            if logo:
+                stamp = stamp_logo(
+                    part.output, logo, color, margin=res.margin, title_block=[part.name, *lines]
+                )
+                for warning in stamp.warnings:
+                    print(f"      WARNING: {warning}")
+            if part.breaks:
+                print(f"      {part.breaks} system breaks before texts at the right margin")
+            if part.pages > MAX_PAGES:
+                print(f"      WARNING: {part.name} needs more than {MAX_PAGES} pages")
+            for text in part.beyond_margin:
+                print(f"      WARNING: {text!r} runs past the right margin")
     return 1 if failed else 0
 
 
@@ -112,6 +158,20 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument("--out", type=Path, help="output directory (default: next to each input)")
     s.add_argument("--fmt", default="pdf", help="pdf, png, mscz, mid, musicxml ...")
     s.set_defaults(func=_cmd_render)
+
+    s = sub.add_parser("parts", help="render one PDF per part of MusicXML files")
+    s.add_argument("files", nargs="+", type=Path)
+    s.add_argument(
+        "--logo", type=Path, help="logo for title block and header (default: env XSATZ_LOGO)"
+    )
+    s.add_argument(
+        "--color",
+        type=parse_color,
+        help="accent colour of the header rule as #RRGGBB "
+        "(default: env XSATZ_COLOR, else taken from the logo)",
+    )
+    s.add_argument("--out", type=Path, help="output directory (default: next to each input)")
+    s.set_defaults(func=_cmd_parts)
 
     s = sub.add_parser("compare", help="compare a reference PDF with a generated PDF")
     s.add_argument("ref", type=Path)

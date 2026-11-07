@@ -275,3 +275,25 @@ def test_prepared_file_declares_musicxml(tmp_path):
     head = target.read_text(encoding="utf-8")[:300]
     assert head.startswith('<?xml version="1.0" encoding="UTF-8"?>')
     assert "<!DOCTYPE score-partwise" in head
+
+
+def test_text_font_comes_from_the_style(tmp_path):
+    style = tmp_path / "score.mss"
+    style.write_text(
+        '<museScore version="4.70"><Style><defaultFontFace>Example Serif</defaultFontFace>'
+        "</Style></museScore>",
+        encoding="utf-8",
+    )
+    target = tmp_path / "prepared.musicxml"
+
+    result = prepare(FIXTURE, target, style)
+
+    root = ET.parse(target).getroot()
+    fonts = {f.tag: f.get("font-family") for f in root.find("defaults") if f.tag.endswith("-font")}
+    assert fonts == {
+        "music-font": "Bravura",
+        "word-font": "Example Serif",
+        "lyric-font": "Example Serif",
+    }
+    assert [e for part in root.findall("part") for e in part.iter() if e.get("font-family")] == []
+    assert result.fonts_from_style == 3

@@ -42,3 +42,4 @@ of the record whose decision they support.
 | [0006](0006-pip-ruff-pre-commit-and-github-actions.md) | pip, Ruff, pre-commit and GitHub Actions | Accepted |
 | [0007](0007-a-change-is-done-when-the-gate-is-green.md) | A change is done when the gate is green | Accepted |
 | [0008](0008-musescore-4-and-the-stages-around-it.md) | MuseScore 4 engraves, X-Satz works in stages around it | Accepted |
+| [0009](0009-parts-keep-their-staff-size-and-move-systems-closer.md) | Parts keep their staff size and move their systems closer | Proposed |

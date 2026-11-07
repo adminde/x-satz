@@ -204,3 +204,35 @@ def test_logo_from_env(monkeypatch, tmp_path):
     assert logo_from_env() is None
     monkeypatch.setenv(LOGO_ENV, str(tmp_path / "logo.png"))
     assert logo_from_env() == tmp_path / "logo.png"
+
+
+def test_logo_shrinks_to_fit_left_of_a_long_title(tmp_path, logo):
+    path = tmp_path / "portrait.pdf"
+    doc = pymupdf.open()
+    doc.new_page(width=595, height=842).insert_text((70, 60), "A Long Example", fontsize=24)
+    doc.save(path)
+
+    stamp_logo(path, logo, margin=42)
+
+    page = pymupdf.open(path)[0]
+    (title,) = page.search_for("A Long Example")
+    (rect,) = page.get_image_rects(page.get_images()[0][0])
+    assert rect.x0 == pytest.approx(42)
+    assert rect.x1 <= title.x0 - 6 + 0.01
+
+
+def test_title_block_is_measured_by_its_glyphs_for_the_rule(tmp_path, logo):
+    # The box of an italic label reaches below its letters and would leave no room.
+    path = tmp_path / "tight.pdf"
+    doc = pymupdf.open()
+    page = doc.new_page(width=595, height=842)
+    page.insert_text((200, 60), "Example March", fontsize=24)
+    page.insert_text((42, 95), "Horn", fontsize=12, fontname="tiit")
+    page.insert_text((100, 112.5), "Intro", fontsize=10)
+    doc.save(path)
+
+    result = stamp_logo(path, logo, margin=42, title_block=["Horn"])
+
+    assert result.rules == 1
+    (line,) = [d for d in pymupdf.open(path)[0].get_drawings() if d["items"][0][0] == "l"]
+    assert 95.1 < line["rect"].y0 < 102.2

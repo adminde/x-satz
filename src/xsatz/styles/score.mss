@@ -57,7 +57,7 @@
     <lyricsLimitDashCount>0</lyricsLimitDashCount>
     <lyricsMaxDashCount>1</lyricsMaxDashCount>
     <lyricsCenterDashedSyllables>0</lyricsCenterDashedSyllables>
-    <lyricsOddFontFace>Academico</lyricsOddFontFace>
+    <lyricsOddFontFace>EB Garamond</lyricsOddFontFace>
     <lyricsOddFontSize>7</lyricsOddFontSize>
     <lyricsOddLineSpacing>1</lyricsOddLineSpacing>
     <lyricsOddFontSpatiumDependent>0</lyricsOddFontSpatiumDependent>
@@ -71,7 +71,7 @@
     <lyricsOddFrameFgColor r="0" g="0" b="0" a="255"/>
     <lyricsOddFrameBgColor r="255" g="255" b="255" a="0"/>
     <lyricsOddPosition>center</lyricsOddPosition>
-    <lyricsEvenFontFace>Academico</lyricsEvenFontFace>
+    <lyricsEvenFontFace>EB Garamond</lyricsEvenFontFace>
     <lyricsEvenFontSize>7</lyricsEvenFontSize>
     <lyricsEvenLineSpacing>1</lyricsEvenLineSpacing>
     <lyricsEvenFontSpatiumDependent>0</lyricsEvenFontSpatiumDependent>
@@ -223,7 +223,7 @@
     <hairpinHeight>1.15</hairpinHeight>
     <hairpinContHeight>0.5</hairpinContHeight>
     <hairpinLineWidth>0.12</hairpinLineWidth>
-    <hairpinFontFace>Academico</hairpinFontFace>
+    <hairpinFontFace>EB Garamond</hairpinFontFace>
     <hairpinFontSize>10</hairpinFontSize>
     <hairpinLineSpacing>1</hairpinLineSpacing>
     <hairpinFontSpatiumDependent>1</hairpinFontSpatiumDependent>
@@ -257,7 +257,7 @@
     <pedalDashLineLen>4</pedalDashLineLen>
     <pedalDashGapLen>4</pedalDashGapLen>
     <pedalHookHeight>1.2</pedalHookHeight>
-    <pedalFontFace>Academico</pedalFontFace>
+    <pedalFontFace>EB Garamond</pedalFontFace>
     <pedalFontSize>10</pedalFontSize>
     <pedalLineSpacing>1</pedalLineSpacing>
     <pedalFontSpatiumDependent>1</pedalFontSpatiumDependent>
@@ -305,7 +305,7 @@
     <romanNumeralPosBelow x="0" y="3.5"/>
     <nashvilleNumberPosAbove x="0" y="-2.5"/>
     <nashvilleNumberPosBelow x="0" y="3.5"/>
-    <chordSymbolAFontFace>Academico</chordSymbolAFontFace>
+    <chordSymbolAFontFace>EB Garamond</chordSymbolAFontFace>
     <chordSymbolAFontSize>6.15004</chordSymbolAFontSize>
     <chordSymbolALineSpacing>1</chordSymbolALineSpacing>
     <chordSymbolAFontSpatiumDependent>1</chordSymbolAFontSpatiumDependent>
@@ -318,7 +318,7 @@
     <chordSymbolAFrameRound>0</chordSymbolAFrameRound>
     <chordSymbolAFrameFgColor r="0" g="0" b="0" a="255"/>
     <chordSymbolAFrameBgColor r="255" g="255" b="255" a="0"/>
-    <chordSymbolBFontFace>Academico</chordSymbolBFontFace>
+    <chordSymbolBFontFace>EB Garamond</chordSymbolBFontFace>
     <chordSymbolBFontSize>6.15004</chordSymbolBFontSize>
     <chordSymbolBLineSpacing>1</chordSymbolBLineSpacing>
     <chordSymbolBFontSpatiumDependent>1</chordSymbolBFontSpatiumDependent>
@@ -331,7 +331,7 @@
     <chordSymbolBFrameRound>0</chordSymbolBFrameRound>
     <chordSymbolBFrameFgColor r="0" g="0" b="0" a="255"/>
     <chordSymbolBFrameBgColor r="255" g="255" b="255" a="0"/>
-    <romanNumeralFontFace>Academico</romanNumeralFontFace>
+    <romanNumeralFontFace>EB Garamond</romanNumeralFontFace>
     <romanNumeralFontSize>12</romanNumeralFontSize>
     <romanNumeralLineSpacing>1</romanNumeralLineSpacing>
     <romanNumeralFontSpatiumDependent>1</romanNumeralFontSpatiumDependent>
@@ -344,7 +344,7 @@
     <romanNumeralFrameRound>0</romanNumeralFrameRound>
     <romanNumeralFrameFgColor r="0" g="0" b="0" a="255"/>
     <romanNumeralFrameBgColor r="255" g="255" b="255" a="0"/>
-    <nashvilleNumberFontFace>Academico</nashvilleNumberFontFace>
+    <nashvilleNumberFontFace>EB Garamond</nashvilleNumberFontFace>
     <nashvilleNumberFontSize>6.15004</nashvilleNumberFontSize>
     <nashvilleNumberLineSpacing>1</nashvilleNumberLineSpacing>
     <nashvilleNumberFontSpatiumDependent>1</nashvilleNumberFontSpatiumDependent>
@@ -526,7 +526,7 @@
     <voltaLineStyle>solid</voltaLineStyle>
     <voltaDashLineLen>5</voltaDashLineLen>
     <voltaDashGapLen>5</voltaDashGapLen>
-    <voltaFontFace>Academico</voltaFontFace>
+    <voltaFontFace>EB Garamond</voltaFontFace>
     <voltaFontSize>11</voltaFontSize>
     <voltaLineSpacing>1</voltaLineSpacing>
     <voltaFontSpatiumDependent>1</voltaFontSpatiumDependent>
@@ -582,7 +582,7 @@
     <ottavaDashLineLen>6</ottavaDashLineLen>
     <ottavaDashGapLen>6</ottavaDashGapLen>
     <ottavaNumbersOnly>1</ottavaNumbersOnly>
-    <ottavaFontFace>Academico</ottavaFontFace>
+    <ottavaFontFace>EB Garamond</ottavaFontFace>
     <ottavaFontSize>10</ottavaFontSize>
     <ottavaLineSpacing>1</ottavaLineSpacing>
     <ottavaFontSpatiumDependent>1</ottavaFontSpatiumDependent>
@@ -623,7 +623,7 @@
     <tupletDirection>0</tupletDirection>
     <tupletNumberType>0</tupletNumberType>
     <tupletBracketType>0</tupletBracketType>
-    <tupletFontFace>Academico</tupletFontFace>
+    <tupletFontFace>EB Garamond</tupletFontFace>
     <tupletFontSize>6.15004</tupletFontSize>
     <tupletLineSpacing>1</tupletLineSpacing>
     <tupletFontSpatiumDependent>1</tupletFontSpatiumDependent>
@@ -695,7 +695,7 @@
     <tremoloBarLineWidth>0.12</tremoloBarLineWidth>
     <jumpPosAbove x="0" y="-2"/>
     <markerPosAbove x="0" y="-2"/>
-    <defaultFontFace>Academico</defaultFontFace>
+    <defaultFontFace>EB Garamond</defaultFontFace>
     <defaultFontSize>10</defaultFontSize>
     <defaultLineSpacing>1</defaultLineSpacing>
     <defaultFontSpatiumDependent>1</defaultFontSpatiumDependent>
@@ -713,7 +713,7 @@
     <defaultSystemFlag>0</defaultSystemFlag>
     <defaultText></defaultText>
     <defaultPosition>left</defaultPosition>
-    <titleFontFace>Academico</titleFontFace>
+    <titleFontFace>EB Garamond</titleFontFace>
     <titleFontSize>24</titleFontSize>
     <titleLineSpacing>1</titleLineSpacing>
     <titleFontSpatiumDependent>0</titleFontSpatiumDependent>
@@ -729,7 +729,7 @@
     <titleFrameFgColor r="0" g="0" b="0" a="255"/>
     <titleFrameBgColor r="255" g="255" b="255" a="0"/>
     <titlePosition>center</titlePosition>
-    <subTitleFontFace>Academico</subTitleFontFace>
+    <subTitleFontFace>EB Garamond</subTitleFontFace>
     <subTitleFontSize>12</subTitleFontSize>
     <subTitleLineSpacing>1</subTitleLineSpacing>
     <subTitleFontSpatiumDependent>0</subTitleFontSpatiumDependent>
@@ -745,7 +745,7 @@
     <subTitleFrameFgColor r="0" g="0" b="0" a="255"/>
     <subTitleFrameBgColor r="255" g="255" b="255" a="0"/>
     <subTitlePosition>center</subTitlePosition>
-    <composerFontFace>Academico</composerFontFace>
+    <composerFontFace>EB Garamond</composerFontFace>
     <composerFontSize>8.5</composerFontSize>
     <composerLineSpacing>1</composerLineSpacing>
     <composerFontSpatiumDependent>0</composerFontSpatiumDependent>
@@ -761,7 +761,7 @@
     <composerFrameFgColor r="0" g="0" b="0" a="255"/>
     <composerFrameBgColor r="255" g="255" b="255" a="0"/>
     <composerPosition>right</composerPosition>
-    <lyricistFontFace>Academico</lyricistFontFace>
+    <lyricistFontFace>EB Garamond</lyricistFontFace>
     <lyricistFontSize>12</lyricistFontSize>
     <lyricistLineSpacing>1</lyricistLineSpacing>
     <lyricistFontSpatiumDependent>0</lyricistFontSpatiumDependent>
@@ -777,7 +777,7 @@
     <lyricistFrameFgColor r="0" g="0" b="0" a="255"/>
     <lyricistFrameBgColor r="255" g="255" b="255" a="0"/>
     <lyricistPosition>left</lyricistPosition>
-    <fingeringFontFace>Academico</fingeringFontFace>
+    <fingeringFontFace>EB Garamond</fingeringFontFace>
     <fingeringFontSize>6.15004</fingeringFontSize>
     <fingeringLineSpacing>1</fingeringLineSpacing>
     <fingeringFontSpatiumDependent>1</fingeringFontSpatiumDependent>
@@ -806,7 +806,7 @@
     <tabFretNumberFrameRound>0</tabFretNumberFrameRound>
     <tabFretNumberFrameFgColor r="0" g="0" b="0" a="255"/>
     <tabFretNumberFrameBgColor r="255" g="255" b="255" a="0"/>
-    <lhGuitarFingeringFontFace>Academico</lhGuitarFingeringFontFace>
+    <lhGuitarFingeringFontFace>EB Garamond</lhGuitarFingeringFontFace>
     <lhGuitarFingeringFontSize>6.15004</lhGuitarFingeringFontSize>
     <lhGuitarFingeringLineSpacing>1</lhGuitarFingeringLineSpacing>
     <lhGuitarFingeringFontSpatiumDependent>1</lhGuitarFingeringFontSpatiumDependent>
@@ -821,7 +821,7 @@
     <lhGuitarFingeringFrameBgColor r="255" g="255" b="255" a="0"/>
     <lhGuitarFingeringOffset x="-0.5" y="0"/>
     <lhGuitarFingeringPosition>right</lhGuitarFingeringPosition>
-    <rhGuitarFingeringFontFace>Academico</rhGuitarFingeringFontFace>
+    <rhGuitarFingeringFontFace>EB Garamond</rhGuitarFingeringFontFace>
     <rhGuitarFingeringFontSize>6.15004</rhGuitarFingeringFontSize>
     <rhGuitarFingeringLineSpacing>1</rhGuitarFingeringLineSpacing>
     <rhGuitarFingeringFontSpatiumDependent>1</rhGuitarFingeringFontSpatiumDependent>
@@ -836,7 +836,7 @@
     <rhGuitarFingeringFrameBgColor r="255" g="255" b="255" a="0"/>
     <rhGuitarFingeringOffset x="0" y="0"/>
     <rhGuitarFingeringPosition>center</rhGuitarFingeringPosition>
-    <hammerOnPullOffTappingFontFace>Academico</hammerOnPullOffTappingFontFace>
+    <hammerOnPullOffTappingFontFace>EB Garamond</hammerOnPullOffTappingFontFace>
     <hammerOnPullOffTappingFontSize>8</hammerOnPullOffTappingFontSize>
     <hammerOnPullOffTappingLineSpacing>1</hammerOnPullOffTappingLineSpacing>
     <hammerOnPullOffTappingFontSpatiumDependent>1</hammerOnPullOffTappingFontSpatiumDependent>
@@ -864,7 +864,7 @@
     <lhTappingSlurTopAndBottomNoteOnTab>1</lhTappingSlurTopAndBottomNoteOnTab>
     <rhTappingSymbolNormalStave>plus</rhTappingSymbolNormalStave>
     <rhTappingSymbolTab>T</rhTappingSymbolTab>
-    <stringNumberFontFace>Academico</stringNumberFontFace>
+    <stringNumberFontFace>EB Garamond</stringNumberFontFace>
     <stringNumberFontSize>6.15004</stringNumberFontSize>
     <stringNumberLineSpacing>1</stringNumberLineSpacing>
     <stringNumberFontSpatiumDependent>1</stringNumberFontSpatiumDependent>
@@ -880,7 +880,7 @@
     <stringNumberOffset x="0" y="0"/>
     <stringNumberPosition>center</stringNumberPosition>
     <stringTuningsFontSize>6.15004</stringTuningsFontSize>
-    <harpPedalDiagramFontFace>Academico</harpPedalDiagramFontFace>
+    <harpPedalDiagramFontFace>EB Garamond</harpPedalDiagramFontFace>
     <harpPedalDiagramFontSize>10</harpPedalDiagramFontSize>
     <harpPedalDiagramLineSpacing>1</harpPedalDiagramLineSpacing>
     <harpPedalDiagramFontSpatiumDependent>1</harpPedalDiagramFontSpatiumDependent>
@@ -900,7 +900,7 @@
     <harpPedalDiagramPosBelow x="0" y="2.5"/>
     <harpPedalDiagramMinDistance>0.5</harpPedalDiagramMinDistance>
     <harpPedalDiagramPosition>center</harpPedalDiagramPosition>
-    <harpPedalTextDiagramFontFace>Academico</harpPedalTextDiagramFontFace>
+    <harpPedalTextDiagramFontFace>EB Garamond</harpPedalTextDiagramFontFace>
     <harpPedalTextDiagramFontSize>8</harpPedalTextDiagramFontSize>
     <harpPedalTextDiagramLineSpacing>1</harpPedalTextDiagramLineSpacing>
     <harpPedalTextDiagramFontSpatiumDependent>1</harpPedalTextDiagramFontSpatiumDependent>
@@ -919,7 +919,7 @@
     <harpPedalTextDiagramPosBelow x="0" y="2.5"/>
     <harpPedalTextDiagramMinDistance>0.5</harpPedalTextDiagramMinDistance>
     <harpPedalTextDiagramPosition>left</harpPedalTextDiagramPosition>
-    <articulationFontFace>Academico</articulationFontFace>
+    <articulationFontFace>EB Garamond</articulationFontFace>
     <articulationFontSize>6.15004</articulationFontSize>
     <articulationLineSpacing>1</articulationLineSpacing>
     <articulationFontSpatiumDependent>1</articulationFontSpatiumDependent>
@@ -934,7 +934,7 @@
     <articulationFrameBgColor r="255" g="255" b="255" a="0"/>
     <articulationOffset x="0" y="0"/>
     <articulationPosition>left</articulationPosition>
-    <longInstrumentFontFace>Academico</longInstrumentFontFace>
+    <longInstrumentFontFace>EB Garamond</longInstrumentFontFace>
     <longInstrumentFontSize>6</longInstrumentFontSize>
     <longInstrumentLineSpacing>1</longInstrumentLineSpacing>
     <longInstrumentFontSpatiumDependent>0</longInstrumentFontSpatiumDependent>
@@ -949,7 +949,7 @@
     <longInstrumentFrameFgColor r="0" g="0" b="0" a="255"/>
     <longInstrumentFrameBgColor r="255" g="255" b="255" a="0"/>
     <longInstrumentPosition>right</longInstrumentPosition>
-    <shortInstrumentFontFace>Academico</shortInstrumentFontFace>
+    <shortInstrumentFontFace>EB Garamond</shortInstrumentFontFace>
     <shortInstrumentFontSize>6</shortInstrumentFontSize>
     <shortInstrumentLineSpacing>1</shortInstrumentLineSpacing>
     <shortInstrumentFontSpatiumDependent>0</shortInstrumentFontSpatiumDependent>
@@ -964,7 +964,7 @@
     <shortInstrumentFrameFgColor r="0" g="0" b="0" a="255"/>
     <shortInstrumentFrameBgColor r="255" g="255" b="255" a="0"/>
     <shortInstrumentPosition>right</shortInstrumentPosition>
-    <partInstrumentFontFace>Academico</partInstrumentFontFace>
+    <partInstrumentFontFace>EB Garamond</partInstrumentFontFace>
     <partInstrumentFontSize>6.15004</partInstrumentFontSize>
     <partInstrumentLineSpacing>1</partInstrumentLineSpacing>
     <partInstrumentFontSpatiumDependent>0</partInstrumentFontSpatiumDependent>
@@ -979,7 +979,7 @@
     <partInstrumentFrameFgColor r="0" g="0" b="0" a="255"/>
     <partInstrumentFrameBgColor r="255" g="255" b="255" a="0"/>
     <partInstrumentPosition>left</partInstrumentPosition>
-    <dynamicsFontFace>Academico</dynamicsFontFace>
+    <dynamicsFontFace>EB Garamond</dynamicsFontFace>
     <dynamicsFontSize>10</dynamicsFontSize>
     <dynamicsLineSpacing>1</dynamicsLineSpacing>
     <dynamicsFontSpatiumDependent>1</dynamicsFontSpatiumDependent>
@@ -993,7 +993,7 @@
     <dynamicsFrameFgColor r="0" g="0" b="0" a="255"/>
     <dynamicsFrameBgColor r="255" g="255" b="255" a="0"/>
     <dynamicsPosition>center</dynamicsPosition>
-    <expressionFontFace>Academico</expressionFontFace>
+    <expressionFontFace>EB Garamond</expressionFontFace>
     <expressionFontSize>10</expressionFontSize>
     <expressionLineSpacing>1</expressionLineSpacing>
     <expressionFontSpatiumDependent>0</expressionFontSpatiumDependent>
@@ -1012,7 +1012,7 @@
     <expressionFrameBgColor r="255" g="255" b="255" a="0"/>
     <expressionMinDistance>0.5</expressionMinDistance>
     <expressionPosition>left</expressionPosition>
-    <tempoFontFace>Academico</tempoFontFace>
+    <tempoFontFace>EB Garamond</tempoFontFace>
     <tempoFontSize>5.5</tempoFontSize>
     <tempoLineSpacing>1</tempoLineSpacing>
     <tempoFontSpatiumDependent>0</tempoFontSpatiumDependent>
@@ -1031,7 +1031,7 @@
     <tempoFrameFgColor r="0" g="0" b="0" a="255"/>
     <tempoFrameBgColor r="255" g="255" b="255" a="0"/>
     <tempoPosition>left</tempoPosition>
-    <tempoChangeFontFace>Academico</tempoChangeFontFace>
+    <tempoChangeFontFace>EB Garamond</tempoChangeFontFace>
     <tempoChangeFontSize>6.15004</tempoChangeFontSize>
     <tempoChangeLineSpacing>1</tempoChangeLineSpacing>
     <tempoChangeFontSpatiumDependent>1</tempoChangeFontSpatiumDependent>
@@ -1054,7 +1054,7 @@
     <tempoChangeLineStyle>dashed</tempoChangeLineStyle>
     <tempoChangeDashLineLen>6</tempoChangeDashLineLen>
     <tempoChangeDashGapLen>9</tempoChangeDashGapLen>
-    <metronomeFontFace>Academico</metronomeFontFace>
+    <metronomeFontFace>EB Garamond</metronomeFontFace>
     <metronomeFontSize>5.5</metronomeFontSize>
     <metronomeLineSpacing>1</metronomeLineSpacing>
     <metronomeFontSpatiumDependent>0</metronomeFontSpatiumDependent>
@@ -1070,7 +1070,7 @@
     <metronomeFrameFgColor r="0" g="0" b="0" a="255"/>
     <metronomeFrameBgColor r="255" g="255" b="255" a="0"/>
     <metronomePosition>left</metronomePosition>
-    <measureNumberFontFace>Academico</measureNumberFontFace>
+    <measureNumberFontFace>EB Garamond</measureNumberFontFace>
     <measureNumberFontSize>5.5</measureNumberFontSize>
     <measureNumberLineSpacing>1</measureNumberLineSpacing>
     <measureNumberFontSpatiumDependent>0</measureNumberFontSpatiumDependent>
@@ -1092,7 +1092,7 @@
     <measureNumberPosition>left</measureNumberPosition>
     <measureNumberTextStyle>measure_number</measureNumberTextStyle>
     <measureNumberAlignToBarline>1</measureNumberAlignToBarline>
-    <measureNumberAlternateFontFace>Academico</measureNumberAlternateFontFace>
+    <measureNumberAlternateFontFace>EB Garamond</measureNumberAlternateFontFace>
     <measureNumberAlternateFontSize>6.15004</measureNumberAlternateFontSize>
     <measureNumberAlternateLineSpacing>1</measureNumberAlternateLineSpacing>
     <measureNumberAlternateFontSpatiumDependent>0</measureNumberAlternateFontSpatiumDependent>
@@ -1110,7 +1110,7 @@
     <measureNumberAlternatePosition>left</measureNumberAlternatePosition>
     <mmRestShowMeasureNumberRange>0</mmRestShowMeasureNumberRange>
     <mmRestRangeBracketType>0</mmRestRangeBracketType>
-    <mmRestRangeFontFace>Academico</mmRestRangeFontFace>
+    <mmRestRangeFontFace>EB Garamond</mmRestRangeFontFace>
     <mmRestRangeFontSize>6.15004</mmRestRangeFontSize>
     <mmRestRangeFontSpatiumDependent>0</mmRestRangeFontSpatiumDependent>
     <mmRestRangeFontStyle>2</mmRestRangeFontStyle>
@@ -1130,7 +1130,7 @@
     <mmRestRangePosition>center</mmRestRangePosition>
     <mmRestRangeMinDistance>0.5</mmRestRangeMinDistance>
     <mmRestRangeTextStyle>mmrest_range</mmRestRangeTextStyle>
-    <translatorFontFace>Academico</translatorFontFace>
+    <translatorFontFace>EB Garamond</translatorFontFace>
     <translatorFontSize>6.15004</translatorFontSize>
     <translatorLineSpacing>1</translatorLineSpacing>
     <translatorFontSpatiumDependent>0</translatorFontSpatiumDependent>
@@ -1145,7 +1145,7 @@
     <translatorFrameFgColor r="0" g="0" b="0" a="255"/>
     <translatorFrameBgColor r="255" g="255" b="255" a="0"/>
     <translatorPosition>left</translatorPosition>
-    <systemTextFontFace>Academico</systemTextFontFace>
+    <systemTextFontFace>EB Garamond</systemTextFontFace>
     <systemTextFontSize>10</systemTextFontSize>
     <systemTextLineSpacing>1</systemTextLineSpacing>
     <systemTextFontSpatiumDependent>0</systemTextFontSpatiumDependent>
@@ -1164,7 +1164,7 @@
     <systemTextFrameFgColor r="0" g="0" b="0" a="255"/>
     <systemTextFrameBgColor r="255" g="255" b="255" a="0"/>
     <systemTextPosition>left</systemTextPosition>
-    <staffTextFontFace>Academico</staffTextFontFace>
+    <staffTextFontFace>EB Garamond</staffTextFontFace>
     <staffTextFontSize>10</staffTextFontSize>
     <staffTextLineSpacing>1</staffTextLineSpacing>
     <staffTextFontSpatiumDependent>0</staffTextFontSpatiumDependent>
@@ -1213,7 +1213,7 @@
     <fretDiagramFretNumberFrameFgColor r="0" g="0" b="0" a="255"/>
     <fretDiagramFretNumberFrameBgColor r="255" g="255" b="255" a="0"/>
     <fretDiagramFretNumberPosition>left</fretDiagramFretNumberPosition>
-    <rehearsalMarkFontFace>Academico</rehearsalMarkFontFace>
+    <rehearsalMarkFontFace>EB Garamond</rehearsalMarkFontFace>
     <rehearsalMarkFontSize>8.5</rehearsalMarkFontSize>
     <rehearsalMarkLineSpacing>1</rehearsalMarkLineSpacing>
     <rehearsalMarkFontSpatiumDependent>0</rehearsalMarkFontSpatiumDependent>
@@ -1231,7 +1231,7 @@
     <rehearsalMarkPosAbove x="0" y="-5"/>
     <rehearsalMarkPosBelow x="0" y="4"/>
     <rehearsalMarkMinDistance>0.5</rehearsalMarkMinDistance>
-    <repeatPlayCountFontFace>Academico</repeatPlayCountFontFace>
+    <repeatPlayCountFontFace>EB Garamond</repeatPlayCountFontFace>
     <repeatPlayCountFontSize>6.15004</repeatPlayCountFontSize>
     <repeatPlayCountLineSpacing>1</repeatPlayCountLineSpacing>
     <repeatPlayCountFontSpatiumDependent>1</repeatPlayCountFontSpatiumDependent>
@@ -1249,7 +1249,7 @@
     <repeatPlayCountPosAbove x="0" y="-2"/>
     <repeatPlayCountPosBelow x="0" y="4"/>
     <repeatPlayCountMinDistance>0.5</repeatPlayCountMinDistance>
-    <repeatLeftFontFace>Academico</repeatLeftFontFace>
+    <repeatLeftFontFace>EB Garamond</repeatLeftFontFace>
     <repeatLeftFontSize>6.15004</repeatLeftFontSize>
     <repeatLeftLineSpacing>1</repeatLeftLineSpacing>
     <repeatLeftFontSpatiumDependent>1</repeatLeftFontSpatiumDependent>
@@ -1264,7 +1264,7 @@
     <repeatLeftFrameFgColor r="0" g="0" b="0" a="255"/>
     <repeatLeftFrameBgColor r="255" g="255" b="255" a="0"/>
     <repeatLeftPosition>left</repeatLeftPosition>
-    <repeatRightFontFace>Academico</repeatRightFontFace>
+    <repeatRightFontFace>EB Garamond</repeatRightFontFace>
     <repeatRightFontSize>6.15004</repeatRightFontSize>
     <repeatRightLineSpacing>1</repeatRightLineSpacing>
     <repeatRightFontSpatiumDependent>1</repeatRightFontSpatiumDependent>
@@ -1279,7 +1279,7 @@
     <repeatRightFrameFgColor r="0" g="0" b="0" a="255"/>
     <repeatRightFrameBgColor r="255" g="255" b="255" a="0"/>
     <repeatRightPosition>right</repeatRightPosition>
-    <frameFontFace>Academico</frameFontFace>
+    <frameFontFace>EB Garamond</frameFontFace>
     <frameFontSize>6.15004</frameFontSize>
     <frameLineSpacing>1</frameLineSpacing>
     <frameFontSpatiumDependent>0</frameFontSpatiumDependent>
@@ -1294,7 +1294,7 @@
     <frameFrameFgColor r="0" g="0" b="0" a="255"/>
     <frameFrameBgColor r="255" g="255" b="255" a="0"/>
     <framePosition>left</framePosition>
-    <textLineFontFace>Academico</textLineFontFace>
+    <textLineFontFace>EB Garamond</textLineFontFace>
     <textLineFontSize>10</textLineFontSize>
     <textLineLineSpacing>1</textLineLineSpacing>
     <textLineFontSpatiumDependent>1</textLineFontSpatiumDependent>
@@ -1302,7 +1302,7 @@
     <textLineColor r="0" g="0" b="0" a="255"/>
     <textLineTextAlign>left,center</textLineTextAlign>
     <textLineSystemFlag>0</textLineSystemFlag>
-    <systemTextLineFontFace>Academico</systemTextLineFontFace>
+    <systemTextLineFontFace>EB Garamond</systemTextLineFontFace>
     <systemTextLineFontSize>10</systemTextLineFontSize>
     <systemTextLineLineSpacing>1</systemTextLineLineSpacing>
     <systemTextLineFontSpatiumDependent>1</systemTextLineFontSpatiumDependent>
@@ -1311,7 +1311,7 @@
     <systemTextLineTextAlign>left,center</systemTextLineTextAlign>
     <systemTextLineSystemFlag>1</systemTextLineSystemFlag>
     <noteLinePlacement>0</noteLinePlacement>
-    <noteLineFontFace>Academico</noteLineFontFace>
+    <noteLineFontFace>EB Garamond</noteLineFontFace>
     <noteLineFontSize>6.15004</noteLineFontSize>
     <noteLineLineSpacing>1</noteLineLineSpacing>
     <noteLineFontSpatiumDependent>1</noteLineFontSpatiumDependent>
@@ -1330,7 +1330,7 @@
     <noteLineStyle>solid</noteLineStyle>
     <noteLineDashLineLen>5</noteLineDashLineLen>
     <noteLineDashGapLen>5</noteLineDashGapLen>
-    <glissandoFontFace>Academico</glissandoFontFace>
+    <glissandoFontFace>EB Garamond</glissandoFontFace>
     <glissandoFontSize>6.15004</glissandoFontSize>
     <glissandoLineSpacing>1</glissandoLineSpacing>
     <glissandoFontSpatiumDependent>1</glissandoFontSpatiumDependent>
@@ -1354,7 +1354,7 @@
     <glissandoDashLineLen>5</glissandoDashLineLen>
     <glissandoDashGapLen>5</glissandoDashGapLen>
     <glissandoShowText>1</glissandoShowText>
-    <bendFontFace>Academico</bendFontFace>
+    <bendFontFace>EB Garamond</bendFontFace>
     <bendFontSize>6.15004</bendFontSize>
     <bendLineSpacing>1</bendLineSpacing>
     <bendFontSpatiumDependent>1</bendFontSpatiumDependent>
@@ -1385,7 +1385,7 @@
     <guitarDivesAboveStaff>0</guitarDivesAboveStaff>
     <guitarDiveLineWidth>0.13</guitarDiveLineWidth>
     <guitarDiveLineWidthTab>0.15</guitarDiveLineWidthTab>
-    <headerFontFace>Academico</headerFontFace>
+    <headerFontFace>EB Garamond</headerFontFace>
     <headerFontSize>10</headerFontSize>
     <headerLineSpacing>1</headerLineSpacing>
     <headerFontSpatiumDependent>0</headerFontSpatiumDependent>
@@ -1400,7 +1400,7 @@
     <headerFrameFgColor r="0" g="0" b="0" a="255"/>
     <headerFrameBgColor r="255" g="255" b="255" a="0"/>
     <headerPosition>center</headerPosition>
-    <footerFontFace>Academico</footerFontFace>
+    <footerFontFace>EB Garamond</footerFontFace>
     <footerFontSize>8</footerFontSize>
     <footerLineSpacing>1</footerLineSpacing>
     <footerFontSpatiumDependent>0</footerFontSpatiumDependent>
@@ -1415,7 +1415,7 @@
     <footerFrameFgColor r="0" g="0" b="0" a="255"/>
     <footerFrameBgColor r="255" g="255" b="255" a="0"/>
     <footerPosition>center</footerPosition>
-    <copyrightFontFace>Academico</copyrightFontFace>
+    <copyrightFontFace>EB Garamond</copyrightFontFace>
     <copyrightFontSize>8</copyrightFontSize>
     <copyrightLineSpacing>1</copyrightLineSpacing>
     <copyrightFontSpatiumDependent>0</copyrightFontSpatiumDependent>
@@ -1430,7 +1430,7 @@
     <copyrightFrameFgColor r="0" g="0" b="0" a="255"/>
     <copyrightFrameBgColor r="255" g="255" b="255" a="0"/>
     <copyrightPosition>center</copyrightPosition>
-    <pageNumberFontFace>Academico</pageNumberFontFace>
+    <pageNumberFontFace>EB Garamond</pageNumberFontFace>
     <pageNumberFontSize>10</pageNumberFontSize>
     <pageNumberLineSpacing>1</pageNumberLineSpacing>
     <pageNumberFontSpatiumDependent>0</pageNumberFontSpatiumDependent>
@@ -1445,7 +1445,7 @@
     <pageNumberFrameFgColor r="0" g="0" b="0" a="255"/>
     <pageNumberFrameBgColor r="255" g="255" b="255" a="0"/>
     <pageNumberPosition>center</pageNumberPosition>
-    <instrumentChangeFontFace>Academico</instrumentChangeFontFace>
+    <instrumentChangeFontFace>EB Garamond</instrumentChangeFontFace>
     <instrumentChangeFontSize>6.15004</instrumentChangeFontSize>
     <instrumentChangeLineSpacing>1</instrumentChangeLineSpacing>
     <instrumentChangeFontSpatiumDependent>1</instrumentChangeFontSpatiumDependent>
@@ -1464,7 +1464,7 @@
     <instrumentChangeFrameFgColor r="0" g="0" b="0" a="255"/>
     <instrumentChangeFrameBgColor r="255" g="255" b="255" a="0"/>
     <instrumentChangePosition>left</instrumentChangePosition>
-    <stickingFontFace>Academico</stickingFontFace>
+    <stickingFontFace>EB Garamond</stickingFontFace>
     <stickingFontSize>6.15004</stickingFontSize>
     <stickingLineSpacing>1</stickingLineSpacing>
     <stickingFontSpatiumDependent>1</stickingFontSpatiumDependent>
@@ -1490,7 +1490,7 @@
     <figuredBassFontStyle>0</figuredBassFontStyle>
     <figuredBassColor r="0" g="0" b="0" a="255"/>
     <user1Name></user1Name>
-    <user1FontFace>Academico</user1FontFace>
+    <user1FontFace>EB Garamond</user1FontFace>
     <user1FontSize>6.15004</user1FontSize>
     <user1LineSpacing>1</user1LineSpacing>
     <user1FontSpatiumDependent>1</user1FontSpatiumDependent>
@@ -1507,7 +1507,7 @@
     <user1FrameBgColor r="255" g="255" b="255" a="0"/>
     <user1Position>left</user1Position>
     <user2Name></user2Name>
-    <user2FontFace>Academico</user2FontFace>
+    <user2FontFace>EB Garamond</user2FontFace>
     <user2FontSize>6.15004</user2FontSize>
     <user2LineSpacing>1</user2LineSpacing>
     <user2FontSpatiumDependent>1</user2FontSpatiumDependent>
@@ -1524,7 +1524,7 @@
     <user2FrameBgColor r="255" g="255" b="255" a="0"/>
     <user2Position>left</user2Position>
     <user3Name></user3Name>
-    <user3FontFace>Academico</user3FontFace>
+    <user3FontFace>EB Garamond</user3FontFace>
     <user3FontSize>6.15004</user3FontSize>
     <user3LineSpacing>1</user3LineSpacing>
     <user3FontSpatiumDependent>1</user3FontSpatiumDependent>
@@ -1541,7 +1541,7 @@
     <user3FrameBgColor r="255" g="255" b="255" a="0"/>
     <user3Position>left</user3Position>
     <user4Name></user4Name>
-    <user4FontFace>Academico</user4FontFace>
+    <user4FontFace>EB Garamond</user4FontFace>
     <user4FontSize>6.15004</user4FontSize>
     <user4LineSpacing>1</user4LineSpacing>
     <user4FontSpatiumDependent>1</user4FontSpatiumDependent>
@@ -1558,7 +1558,7 @@
     <user4FrameBgColor r="255" g="255" b="255" a="0"/>
     <user4Position>left</user4Position>
     <user5Name></user5Name>
-    <user5FontFace>Academico</user5FontFace>
+    <user5FontFace>EB Garamond</user5FontFace>
     <user5FontSize>6.15004</user5FontSize>
     <user5LineSpacing>1</user5LineSpacing>
     <user5FontSpatiumDependent>1</user5FontSpatiumDependent>
@@ -1575,7 +1575,7 @@
     <user5FrameBgColor r="255" g="255" b="255" a="0"/>
     <user5Position>left</user5Position>
     <user6Name></user6Name>
-    <user6FontFace>Academico</user6FontFace>
+    <user6FontFace>EB Garamond</user6FontFace>
     <user6FontSize>6.15004</user6FontSize>
     <user6LineSpacing>1</user6LineSpacing>
     <user6FontSpatiumDependent>1</user6FontSpatiumDependent>
@@ -1592,7 +1592,7 @@
     <user6FrameBgColor r="255" g="255" b="255" a="0"/>
     <user6Position>left</user6Position>
     <user7Name></user7Name>
-    <user7FontFace>Academico</user7FontFace>
+    <user7FontFace>EB Garamond</user7FontFace>
     <user7FontSize>6.15004</user7FontSize>
     <user7LineSpacing>1</user7LineSpacing>
     <user7FontSpatiumDependent>1</user7FontSpatiumDependent>
@@ -1609,7 +1609,7 @@
     <user7FrameBgColor r="255" g="255" b="255" a="0"/>
     <user7Position>left</user7Position>
     <user8Name></user8Name>
-    <user8FontFace>Academico</user8FontFace>
+    <user8FontFace>EB Garamond</user8FontFace>
     <user8FontSize>6.15004</user8FontSize>
     <user8LineSpacing>1</user8LineSpacing>
     <user8FontSpatiumDependent>1</user8FontSpatiumDependent>
@@ -1626,7 +1626,7 @@
     <user8FrameBgColor r="255" g="255" b="255" a="0"/>
     <user8Position>left</user8Position>
     <user9Name></user9Name>
-    <user9FontFace>Academico</user9FontFace>
+    <user9FontFace>EB Garamond</user9FontFace>
     <user9FontSize>6.15004</user9FontSize>
     <user9LineSpacing>1</user9LineSpacing>
     <user9FontSpatiumDependent>1</user9FontSpatiumDependent>
@@ -1643,7 +1643,7 @@
     <user9FrameBgColor r="255" g="255" b="255" a="0"/>
     <user9Position>left</user9Position>
     <user10Name></user10Name>
-    <user10FontFace>Academico</user10FontFace>
+    <user10FontFace>EB Garamond</user10FontFace>
     <user10FontSize>6.15004</user10FontSize>
     <user10LineSpacing>1</user10LineSpacing>
     <user10FontSpatiumDependent>1</user10FontSpatiumDependent>
@@ -1660,7 +1660,7 @@
     <user10FrameBgColor r="255" g="255" b="255" a="0"/>
     <user10Position>left</user10Position>
     <user11Name></user11Name>
-    <user11FontFace>Academico</user11FontFace>
+    <user11FontFace>EB Garamond</user11FontFace>
     <user11FontSize>6.15004</user11FontSize>
     <user11LineSpacing>1</user11LineSpacing>
     <user11FontSpatiumDependent>1</user11FontSpatiumDependent>
@@ -1677,7 +1677,7 @@
     <user11FrameBgColor r="255" g="255" b="255" a="0"/>
     <user11Position>left</user11Position>
     <user12Name></user12Name>
-    <user12FontFace>Academico</user12FontFace>
+    <user12FontFace>EB Garamond</user12FontFace>
     <user12FontSize>6.15004</user12FontSize>
     <user12LineSpacing>1</user12LineSpacing>
     <user12FontSpatiumDependent>1</user12FontSpatiumDependent>
@@ -1693,7 +1693,7 @@
     <user12FrameFgColor r="0" g="0" b="0" a="255"/>
     <user12FrameBgColor r="255" g="255" b="255" a="0"/>
     <user12Position>left</user12Position>
-    <letRingFontFace>Academico</letRingFontFace>
+    <letRingFontFace>EB Garamond</letRingFontFace>
     <letRingFontSize>10</letRingFontSize>
     <letRingLineSpacing>1</letRingLineSpacing>
     <letRingFontSpatiumDependent>1</letRingFontSpatiumDependent>
@@ -1718,7 +1718,7 @@
     <letRingPosition>left</letRingPosition>
     <letRingEndHookType>3</letRingEndHookType>
     <letRingOffset x="0" y="0"/>
-    <whammyBarFontFace>Academico</whammyBarFontFace>
+    <whammyBarFontFace>EB Garamond</whammyBarFontFace>
     <whammyBarFontSize>10</whammyBarFontSize>
     <whammyBarLineSpacing>1</whammyBarLineSpacing>
     <whammyBarFontSpatiumDependent>1</whammyBarFontSpatiumDependent>
@@ -1743,7 +1743,7 @@
     <whammyBarPosition>left</whammyBarPosition>
     <whammyBarEndHookType>3</whammyBarEndHookType>
     <whammyBarOffset x="0" y="0"/>
-    <palmMuteFontFace>Academico</palmMuteFontFace>
+    <palmMuteFontFace>EB Garamond</palmMuteFontFace>
     <palmMuteFontSize>10</palmMuteFontSize>
     <palmMuteLineSpacing>1</palmMuteLineSpacing>
     <palmMuteFontSpatiumDependent>1</palmMuteFontSpatiumDependent>

@@ -47,6 +47,7 @@ class PrepareResult:
     names_stripped: int = 0
     groups_added: int = 0
     page_layout_from_style: bool = False
+    fonts_from_style: int = 0
     software_replaced: int = 0
 
 
@@ -407,6 +408,38 @@ def _drop_default_font_sizes(root: ET.Element) -> int:
     return dropped
 
 
+def _fonts_from_style(root: ET.Element, style_path: Path) -> int:
+    """Write the text font of the style into the defaults and drop the fonts of single texts.
+
+    MuseScore takes the font families of the MusicXML over the fonts of a style passed with
+    -S, both those of the defaults and those written on single texts. Without a family in the
+    defaults it falls back to its own typeface, so the defaults name the font of the style.
+    Returns the number of fonts changed or dropped.
+    """
+    defaults = root.find("defaults")
+    if defaults is None:
+        return 0
+    family = ET.parse(style_path).getroot().findtext("Style/defaultFontFace")
+    if not family:
+        return 0
+    changed = 0
+    for tag in ("word-font", "lyric-font"):
+        font = defaults.find(tag)
+        if font is None:
+            font = ET.Element(tag)
+            music = defaults.find("music-font")
+            position = list(defaults).index(music) + 1 if music is not None else len(defaults)
+            defaults.insert(position, font)
+        font.set("font-family", family)
+        changed += 1
+    for part in root.findall("part"):
+        for element in part.iter():
+            if "font-family" in element.attrib:
+                del element.attrib["font-family"]
+                changed += 1
+    return changed
+
+
 def _replace_software(root: ET.Element) -> int:
     encoding = root.find("identification/encoding")
     if encoding is None:
@@ -425,7 +458,8 @@ def prepare(
 ) -> PrepareResult:
     """Write a prepared copy of ``source`` to ``target``. ``source`` is never changed.
 
-    With ``style`` the page size and margins of that MuseScore style go into the copy.
+    With ``style`` the page size, margins and text font of that MuseScore style go into the
+    copy.
     """
     source, target = Path(source), Path(target)
     if target.resolve() == source.resolve():
@@ -444,6 +478,7 @@ def prepare(
     result.groups_added = _add_groups(root)
     if style is not None:
         result.page_layout_from_style = _page_layout_from_style(root, Path(style))
+        result.fonts_from_style = _fonts_from_style(root, Path(style))
     result.software_replaced = _replace_software(root)
 
     body = ET.tostring(root, encoding="unicode")

@@ -7,8 +7,9 @@ Stages:
   pre-commit  pre-commit on all files. Afterwards no untracked file may be left over.
   pytest      the test suite.
   render      prepares and renders the public domain fixture with the score style through
-              MuseScore and expects a PDF with at least one page. Without MuseScore the
-              stage is "not checked".
+              MuseScore and expects a PDF with at least one page, then renders the parts of
+              the self-made fixture and expects one PDF per part with at least one page.
+              Without MuseScore the stage is "not checked".
 
 A stage that cannot run because a part of the environment is missing is "not checked".
 It never counts as green: the last line names it, and with --strict the gate is red.
@@ -31,6 +32,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 REPORT = ROOT / "tools" / "gates" / "last-run.json"
 FIXTURE = ROOT / "tests" / "fixtures" / "entchen.musicxml"
+PARTS_FIXTURE = ROOT / "tests" / "fixtures" / "dorico_like.musicxml"
 
 GREEN, RED, ENV, NOT_CHECKED = 0, 1, 2, 3
 VERDICTS = {GREEN: "green", RED: "red", ENV: "environment error", NOT_CHECKED: "not checked"}
@@ -82,6 +84,7 @@ def stage_render() -> int:
         return NOT_CHECKED
     import pymupdf
 
+    from xsatz.parts import render_parts
     from xsatz.render import default_style, render
 
     with tempfile.TemporaryDirectory() as out:
@@ -91,7 +94,15 @@ def stage_render() -> int:
             return RED
         with pymupdf.open(res.outputs[0]) as doc:
             print(f"{res.outputs[0].name}: {doc.page_count} page(s)")
-            return GREEN if doc.page_count >= 1 else RED
+            if doc.page_count < 1:
+                return RED
+        parts = render_parts(PARTS_FIXTURE, out)
+        if not parts.ok:
+            print(parts.log)
+            return RED
+        for part in parts.parts:
+            print(f"{part.output.name}: {part.pages} page(s)")
+        return GREEN if all(part.pages >= 1 for part in parts.parts) else RED
 
 
 STAGES: tuple[tuple[str, Callable[[], int]], ...] = (
