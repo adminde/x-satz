@@ -1,4 +1,4 @@
-"""Stamp the band logo and the header rule into a finished PDF (ADR 0008).
+"""The theme of a PDF: the band logo and the accent rules stamped into it (ADR 0008).
 
 MuseScore sets every text of the design. Only the logo and the rule come from here, placed
 relative to the texts MuseScore drew, so that a change of the style moves them along.

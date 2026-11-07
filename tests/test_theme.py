@@ -5,7 +5,7 @@ import pymupdf
 import pytest
 from PIL import Image, ImageDraw
 
-from xsatz.brand import (
+from xsatz.theme import (
     COLOR_ENV,
     LOGO_ENV,
     color_from_env,

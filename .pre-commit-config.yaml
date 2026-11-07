@@ -21,12 +21,11 @@ repos:
         files: '(^data/|\.(pdf|dorico|mscz|mscx|mxl|musicxml|mid|midi)$)'
         exclude: '^tests/fixtures/'
       # ADR 0003: local configuration and secrets stay on the machine
-      - id: no-env-files
-        name: no .env files
-        entry: ".env files must not be committed, use .env.example for documentation (ADR 0003)"
+      - id: no-local-settings
+        name: no x-satz.conf or .env files
+        entry: "x-satz.conf and .env files must not be committed, use x-satz.example.conf (ADR 0003)"
         language: fail
-        files: '(^|/)\.env(\..+)?$'
-        exclude: '(^|/)\.env\.example$'
+        files: '(^|/)(x-satz\.conf|\.env(\..+)?)$'
 
   # Hooks that rewrite files skip the third-party assets in libs/<kind>/<name>/ (ADR 0004)
   - repo: https://github.com/pre-commit/pre-commit-hooks

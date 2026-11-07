@@ -72,7 +72,7 @@ rev in `.pre-commit-config.yaml`; change both together.
   them: PDFs, images, excerpts, titles or credits of the pieces
   ([ADR 0003](docs/adr/0003-public-repository-without-protected-or-personal-data.md)).
 - Put personal or organisational data (arrangers, credits, copyright lines, contact data,
-  credentials) or `.env` files into the repository
+  credentials), `x-satz.conf` or `.env` files into the repository
   ([ADR 0003](docs/adr/0003-public-repository-without-protected-or-personal-data.md)).
 - Modify, rename, subset or convert files under `libs/<kind>/<name>/`
   ([ADR 0004](docs/adr/0004-third-party-assets-in-libs.md)).
@@ -116,7 +116,7 @@ input files and directories are always passed in, output directories are optiona
 to the directory of the input. Resources that ship with X-Satz, such as MuseScore styles, live
 inside the package (`src/xsatz/styles/`) and are loaded with `importlib.resources`.
 
-Personal and organisational data come from configuration or `.env` at run time
+Personal and organisational data come from `x-satz.conf` or the environment at run time
 ([ADR 0003](docs/adr/0003-public-repository-without-protected-or-personal-data.md)).
 
 Engraving is done by MuseScore 4 on the command line
@@ -135,12 +135,12 @@ src/xsatz/
   cli.py        # argparse subcommands: doctor, info, render, parts, compare
   musescore.py  # find MuseScore (env MSCORE) and run it headless
   xmlinfo.py    # MusicXML analysis (.musicxml/.xml/.mxl)
-  config.py     # .env file for the command line, never read by the API (ADR 0003)
+  config.py     # x-satz.conf for the command line, never read by the API (ADR 0003)
   prepare.py    # prepared copy of the MusicXML before MuseScore reads it (ADR 0008)
   render.py     # MusicXML -> pdf/png/mscz/mid through MuseScore, prepared and styled
   parts.py      # one PDF per part, extracted by MuseScore and fitted to 2 pages (ADR 0009)
   mscz.py       # edits of MuseScore's own files between import and export (ADR 0008, 0009)
-  brand.py      # logo and header rule stamped into the finished PDF (ADR 0008)
+  theme.py      # logo and accent rules stamped into the finished PDF (ADR 0008)
   compare.py    # reference PDF vs. generated PDF, images and metrics
   styles/       # score.mss and part.mss, the styles shipped with the package
 tests/          # pytest, fixtures: entchen.musicxml (public domain), dorico_like.musicxml (self-made)
@@ -198,7 +198,7 @@ Success criteria, in this order:
    the copyright on page 1 only.
 
 There is no Dorico reference for the parts, so they are judged by eye. The decisions and
-findings are recorded in [ADR 0009](docs/adr/0009-parts-keep-their-staff-size-and-move-systems-closer.md).
+findings are recorded in [ADR 0009](docs/adr/0009-layout-of-the-full-score-and-the-parts.md).
 
 Deliverable: the parts of the reference piece, accepted by the maintainer, with the part
 style `src/xsatz/styles/part.mss` and the stages of ADR 0009.

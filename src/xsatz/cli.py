@@ -3,13 +3,12 @@
 from __future__ import annotations
 
 import argparse
-import os
 import sys
 from pathlib import Path
 
 from xsatz import __version__, musescore
-from xsatz.brand import parse_color
-from xsatz.config import load_env_file
+from xsatz.config import SETTINGS_FILE, Settings, read_settings
+from xsatz.theme import parse_color
 
 
 def _cmd_info(a: argparse.Namespace) -> int:
@@ -20,21 +19,26 @@ def _cmd_info(a: argparse.Namespace) -> int:
     return 0
 
 
-def _branding(a: argparse.Namespace) -> tuple[Path | None, tuple[float, float, float] | None]:
-    """Logo and accent colour from the options, else from the environment."""
-    from xsatz.brand import color_from_env, logo_from_env
+def _theme(a: argparse.Namespace) -> tuple[Path | None, tuple[float, float, float] | None]:
+    """Logo and accent colour of the theme: options, else environment, else settings."""
+    from xsatz.theme import color_from_env, logo_from_env
 
-    return a.logo or logo_from_env(), a.color or color_from_env()
+    settings: Settings = a.settings
+    logo = a.logo or logo_from_env() or settings.logo
+    color = a.color or color_from_env()
+    if color is None and settings.color:
+        color = parse_color(settings.color)
+    return logo, color
 
 
 def _cmd_render(a: argparse.Namespace) -> int:
-    from xsatz.brand import stamp_logo
     from xsatz.render import default_style, render
+    from xsatz.theme import stamp_logo
 
     try:
-        logo, color = _branding(a)
+        logo, color = _theme(a)
     except ValueError as exc:
-        print(f"XSATZ_COLOR: {exc}")
+        print(f"ERROR: {exc}")
         return 2
     print("MuseScore:", musescore.version())
     style = None if a.raw else (a.style or default_style())
@@ -64,13 +68,13 @@ def _cmd_render(a: argparse.Namespace) -> int:
 
 
 def _cmd_parts(a: argparse.Namespace) -> int:
-    from xsatz.brand import stamp_logo
     from xsatz.parts import MAX_PAGES, render_parts
+    from xsatz.theme import stamp_logo
 
     try:
-        logo, color = _branding(a)
+        logo, color = _theme(a)
     except ValueError as exc:
-        print(f"XSATZ_COLOR: {exc}")
+        print(f"ERROR: {exc}")
         return 2
     print("MuseScore:", musescore.version())
     failed = 0
@@ -147,13 +151,15 @@ def build_parser() -> argparse.ArgumentParser:
         help="render the original as MuseScore imports it, without preparing and without style",
     )
     s.add_argument(
-        "--logo", type=Path, help="logo for title block and header (default: env XSATZ_LOGO)"
+        "--logo",
+        type=Path,
+        help="logo for title block and header (default: env XSATZ_LOGO, then x-satz.conf)",
     )
     s.add_argument(
         "--color",
         type=parse_color,
         help="accent colour of the header rule as #RRGGBB "
-        "(default: env XSATZ_COLOR, else taken from the logo)",
+        "(default: env XSATZ_COLOR, then x-satz.conf, else taken from the logo)",
     )
     s.add_argument("--out", type=Path, help="output directory (default: next to each input)")
     s.add_argument("--fmt", default="pdf", help="pdf, png, mscz, mid, musicxml ...")
@@ -162,13 +168,15 @@ def build_parser() -> argparse.ArgumentParser:
     s = sub.add_parser("parts", help="render one PDF per part of MusicXML files")
     s.add_argument("files", nargs="+", type=Path)
     s.add_argument(
-        "--logo", type=Path, help="logo for title block and header (default: env XSATZ_LOGO)"
+        "--logo",
+        type=Path,
+        help="logo for title block and header (default: env XSATZ_LOGO, then x-satz.conf)",
     )
     s.add_argument(
         "--color",
         type=parse_color,
         help="accent colour of the header rule as #RRGGBB "
-        "(default: env XSATZ_COLOR, else taken from the logo)",
+        "(default: env XSATZ_COLOR, then x-satz.conf, else taken from the logo)",
     )
     s.add_argument("--out", type=Path, help="output directory (default: next to each input)")
     s.set_defaults(func=_cmd_parts)
@@ -184,9 +192,15 @@ def build_parser() -> argparse.ArgumentParser:
     return p
 
 
-def main(argv: list[str] | None = None, env_file: Path | None = Path(".env")) -> int:
-    """Run the command line. ``env_file`` is read first, the environment wins over it."""
-    if env_file is not None:
-        load_env_file(env_file, os.environ)
+def main(argv: list[str] | None = None, settings_file: Path | None = Path(SETTINGS_FILE)) -> int:
+    """Run the command line with the settings in ``settings_file``, if there are any.
+
+    Command line options win over the environment, the environment wins over the settings.
+    """
     args = build_parser().parse_args(argv)
+    try:
+        args.settings = read_settings(settings_file) if settings_file else Settings()
+    except ValueError as exc:
+        print(f"ERROR: {exc}")
+        return 2
     return args.func(args)

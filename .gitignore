@@ -2,9 +2,9 @@
 data/
 
 # Local configuration and secrets (ADR 0003)
+x-satz.conf
 .env
 .env.*
-!.env.example
 
 # Python
 .venv/

@@ -57,7 +57,7 @@ We will engrave with MuseScore 4.x only, called through `xsatz.musescore` with t
 3. **Edit** (`xsatz.mscz`): changes MusicXML cannot carry, so far the copyright line in a
    frame after the system of page 1, 5 mm above the bottom edge.
 4. **Export**: MuseScore writes the requested format from the edited file.
-5. **Finish** (`xsatz.brand`): the logo left of the title and in the running header, and a rule
+5. **Finish** (`xsatz.theme`): the logo left of the title and in the running header, and a rule
    in the configured accent colour under the title block and under every running header,
    stamped into the PDF at positions taken from the texts MuseScore drew. An SVG logo stays
    vector. One that embeds raster images is stamped as a single image of moderate size,

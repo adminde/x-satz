@@ -1,43 +1,40 @@
-from xsatz.config import load_env_file, read_env_file
+from pathlib import Path
+
+import pytest
+
+from xsatz.config import Settings, read_settings
+
+EXAMPLE = Path(__file__).parents[1] / "x-satz.example.conf"
 
 
-def test_env_file_pairs_comments_and_quotes(tmp_path):
-    env = tmp_path / ".env"
-    env.write_text(
-        "# Configuration\n"
-        "\n"
-        "XSATZ_LOGO=data/Brand/logo.svg\n"
-        "XSATZ_COLOR=#711611\n"
-        "EMPTY=\n"
-        "QUOTED='a # b'\n"
-        'export DOUBLE="x"\n'
-        "WITH_COMMENT=value # explained\n"
-        "not a pair\n",
-        encoding="utf-8",
-    )
+def test_theme_with_a_logo_relative_to_the_file(tmp_path):
+    conf = tmp_path / "x-satz.conf"
+    conf.write_text('[theme]\nlogo = "design/logo.svg"\ncolor = "#711611"\n', encoding="utf-8")
 
-    assert read_env_file(env) == {
-        "XSATZ_LOGO": "data/Brand/logo.svg",
-        "XSATZ_COLOR": "#711611",
-        "EMPTY": "",
-        "QUOTED": "a # b",
-        "DOUBLE": "x",
-        "WITH_COMMENT": "value",
-    }
+    settings = read_settings(conf)
+
+    assert settings == Settings(logo=tmp_path / "design" / "logo.svg", color="#711611")
 
 
-def test_environment_wins_over_the_file(tmp_path):
-    env = tmp_path / ".env"
-    env.write_text("XSATZ_COLOR=#711611\nXSATZ_LOGO=logo.svg\n", encoding="utf-8")
-    environ = {"XSATZ_COLOR": "#000000"}
-
-    taken = load_env_file(env, environ)
-
-    assert taken == ["XSATZ_LOGO"]
-    assert environ == {"XSATZ_COLOR": "#000000", "XSATZ_LOGO": "logo.svg"}
+def test_missing_file_and_empty_values_give_empty_settings(tmp_path):
+    assert read_settings(tmp_path / "x-satz.conf") == Settings()
+    conf = tmp_path / "x-satz.conf"
+    conf.write_text('[theme]\nlogo = ""\n', encoding="utf-8")
+    assert read_settings(conf) == Settings()
 
 
-def test_missing_env_file_changes_nothing(tmp_path):
-    environ: dict[str, str] = {}
-    assert load_env_file(tmp_path / ".env", environ) == []
-    assert environ == {}
+@pytest.mark.parametrize(
+    "content",
+    ['[brand]\nlogo = "a.svg"\n', '[theme]\nlogos = "a.svg"\n', "theme = 1\n", "[theme\n"],
+)
+def test_unknown_sections_keys_and_broken_toml_are_errors(tmp_path, content):
+    conf = tmp_path / "x-satz.conf"
+    conf.write_text(content, encoding="utf-8")
+
+    with pytest.raises(ValueError, match="x-satz.conf"):
+        read_settings(conf)
+
+
+def test_example_file_is_valid():
+    settings = read_settings(EXAMPLE)
+    assert settings.logo is not None and settings.color == "#000000"

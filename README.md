@@ -107,20 +107,29 @@ Options of `render`:
 a staff space of 1.75 mm and 12 staff spaces between its systems. When a third page would
 hold only one or two systems, X-Satz tries 10 and then 8 staff spaces. A part that still needs more
 than two pages is kept, and X-Satz prints a warning. The reasons are recorded in
-[ADR 0009](docs/adr/0009-parts-keep-their-staff-size-and-move-systems-closer.md).
+[ADR 0009](docs/adr/0009-layout-of-the-full-score-and-the-parts.md).
 
 ## Configuration
 
 Values that belong to a band or a person are never part of X-Satz. Pass them on the command
-line, set them in the environment, or put them into a `.env` file in the folder you run
-`xsatz` from (start from [`.env.example`](.env.example)). Command line options win over the
-environment, and the environment wins over the `.env` file.
+line, set them in the environment, or put them into `x-satz.conf`, a TOML file in the folder
+you run `xsatz` from (start from [`x-satz.example.conf`](x-satz.example.conf)). Command line
+options win over the environment, and the environment wins over the file.
 
-| Variable | Option | Meaning |
-|---|---|---|
-| `XSATZ_LOGO` | `--logo` | Logo stamped into title block and running header, PNG or SVG. In an SVG, convert text to paths. Without a logo the PDF has none. |
-| `XSATZ_COLOR` | `--color` | Accent colour of the header rule as `#RRGGBB`. Without it X-Satz takes the accent colour of the logo. |
-| `MSCORE` | | Path to the MuseScore executable, when it is not found automatically |
+```toml
+[theme]
+logo = "brand/logo.svg"   # relative to the folder of x-satz.conf
+color = "#D6001C"
+```
+
+| `x-satz.conf` | Variable | Option | Meaning |
+|---|---|---|---|
+| `[theme] logo` | `XSATZ_LOGO` | `--logo` | Logo stamped into title block and running header, PNG or SVG. In an SVG, convert text to paths. Without a logo the PDF has none. |
+| `[theme] color` | `XSATZ_COLOR` | `--color` | Accent colour of the rules as `#RRGGBB`. Without it X-Satz takes the accent colour of the logo. |
+| | `MSCORE` | | Path to the MuseScore executable, when it is not found automatically |
+
+An unknown section or key in `x-satz.conf` stops X-Satz with an error, so a typo does not go
+unnoticed.
 
 Titles and credits come from the MusicXML of the piece itself.
 
