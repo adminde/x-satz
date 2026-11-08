@@ -179,3 +179,24 @@ def test_a_tilde_in_the_soundfont_dir_stands_for_the_home_folder(tmp_path, monke
     conf.write_text('[audio]\nsoundfont_dir = "~/fonts"\n', encoding="utf-8")
 
     assert read_settings(conf).audio.soundfont_dir == tmp_path / "home" / "fonts"
+
+
+def test_output_asks_for_the_musescore_files(tmp_path):
+    conf = tmp_path / "x-satz.conf"
+    conf.write_text("[output]\nmscz = true\n", encoding="utf-8")
+    assert read_settings(conf).mscz is True
+    assert read_settings(EXAMPLE).mscz is False
+
+    conf.write_text('[output]\nmscz = "yes"\n', encoding="utf-8")
+    with pytest.raises(ValueError, match="mscz must be true or false"):
+        read_settings(conf)
+
+
+def test_output_asks_for_midi_files(tmp_path):
+    conf = tmp_path / "x-satz.conf"
+    conf.write_text("[output]\nmidi = true\n", encoding="utf-8")
+    assert (read_settings(conf).midi, read_settings(conf).mscz) == (True, False)
+
+    conf.write_text("[output]\nmidi = 1\n", encoding="utf-8")
+    with pytest.raises(ValueError, match="midi must be true or false"):
+        read_settings(conf)

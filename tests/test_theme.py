@@ -5,14 +5,7 @@ import pymupdf
 import pytest
 from PIL import Image, ImageDraw
 
-from xsatz.theme import (
-    COLOR_ENV,
-    LOGO_ENV,
-    color_from_env,
-    logo_from_env,
-    parse_color,
-    stamp_logo,
-)
+from xsatz.theme import parse_color, stamp_logo
 
 
 @pytest.fixture
@@ -86,13 +79,6 @@ def test_colours_are_read_as_hex(value):
 def test_other_colour_notations_are_refused(value):
     with pytest.raises(ValueError):
         parse_color(value)
-
-
-def test_colour_from_env(monkeypatch):
-    monkeypatch.delenv(COLOR_ENV, raising=False)
-    assert color_from_env() is None
-    monkeypatch.setenv(COLOR_ENV, "#000000")
-    assert color_from_env() == (0.0, 0.0, 0.0)
 
 
 def test_logo_stays_inside_the_printable_area(tmp_path, logo):
@@ -197,13 +183,6 @@ def test_no_title_block_rule_without_room(tmp_path, logo):
 def test_missing_logo_is_an_error(score, tmp_path):
     with pytest.raises(FileNotFoundError):
         stamp_logo(score, tmp_path / "missing.png")
-
-
-def test_logo_from_env(monkeypatch, tmp_path):
-    monkeypatch.delenv(LOGO_ENV, raising=False)
-    assert logo_from_env() is None
-    monkeypatch.setenv(LOGO_ENV, str(tmp_path / "logo.png"))
-    assert logo_from_env() == tmp_path / "logo.png"
 
 
 def test_logo_shrinks_to_fit_left_of_a_long_title(tmp_path, logo):

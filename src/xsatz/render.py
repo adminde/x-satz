@@ -20,6 +20,8 @@ class RenderResult:
     log: str
     prepared: PrepareResult | None = None
     copyright_frame: bool = False
+    # MuseScore's file the PDF was exported from, when it was asked for.
+    mscz: Path | None = None
 
     @property
     def ok(self) -> bool:
@@ -37,13 +39,15 @@ def render(
     fmt: str = "pdf",
     style: str | Path | None = None,
     prepared: bool = True,
+    mscz: bool = False,
 ) -> RenderResult:
     """Render ``source`` with MuseScore.
 
     Without ``out_dir`` the result is written next to ``source``. With ``prepared`` MuseScore
     reads a prepared copy of the MusicXML (ADR 0008) and the copyright goes into a frame on
     the first page of MuseScore's file before the export (ADR 0008). Otherwise MuseScore
-    reads the original once.
+    reads the original once. With ``mscz`` MuseScore's file of a prepared render is written
+    next to the result as well, so that it can be opened and checked in MuseScore.
     """
     source = Path(source)
     out_dir = Path(out_dir) if out_dir is not None else source.parent
@@ -55,6 +59,7 @@ def render(
     log = ""
     info = None
     frame = False
+    kept = None
     with tempfile.TemporaryDirectory(prefix="xsatz-") as work:
         if not prepared:
             log += _run([*styled, "-o", str(target), str(source)])
@@ -68,12 +73,16 @@ def render(
                 shrink_blank_lines(score)
                 if fmt == "mscz":
                     shutil.copyfile(score, target)
+                    kept = target if mscz else None
                 else:
                     log += _run(["-o", str(target), str(score)])
+                    if mscz:
+                        kept = target.with_suffix(".mscz")
+                        shutil.copyfile(score, kept)
     # MuseScore writes one PNG per page as name-1.png, name-2.png, so the target name itself
     # does not exist after a PNG export.
     outputs = [target] if target.exists() else sorted(out_dir.glob(f"{source.stem}-*.{fmt}"))
-    return RenderResult(source, outputs, log[-2000:], info, frame)
+    return RenderResult(source, outputs, log[-2000:], info, frame, kept)
 
 
 def _run(args: list[str]) -> str:

@@ -20,15 +20,23 @@ def _cmd_info(a: argparse.Namespace) -> int:
 
 
 def _theme(a: argparse.Namespace) -> tuple[Path | None, tuple[float, float, float] | None]:
-    """Logo and accent colour of the theme: options, else environment, else settings."""
-    from xsatz.theme import color_from_env, logo_from_env
-
+    """Logo and accent colour of the theme: the options, else the settings."""
     settings: Settings = a.settings
-    logo = a.logo or logo_from_env() or settings.logo
-    color = a.color or color_from_env()
+    logo = a.logo or settings.logo
+    color = a.color
     if color is None and settings.color:
         color = parse_color(settings.color)
     return logo, color
+
+
+def _mscz(a: argparse.Namespace) -> bool:
+    """Whether to keep MuseScore's files: the option, else the settings."""
+    return a.mscz if a.mscz is not None else a.settings.mscz
+
+
+def _midi(a: argparse.Namespace) -> bool:
+    """Whether to write MIDI files as well: the option, else the settings."""
+    return a.midi if a.midi is not None else a.settings.midi
 
 
 def _cmd_render(a: argparse.Namespace) -> int:
@@ -45,7 +53,7 @@ def _cmd_render(a: argparse.Namespace) -> int:
     logo = None if a.raw else logo
     failed = 0
     for f in a.files:
-        res = render(f, a.out, a.fmt, style, prepared=not a.raw)
+        res = render(f, a.out, a.fmt, style, prepared=not a.raw, mscz=_mscz(a))
         if res.prepared:
             p = res.prepared
             print(
@@ -54,6 +62,8 @@ def _cmd_render(a: argparse.Namespace) -> int:
             )
         if res.ok:
             print(f"OK    {res.source.name} -> {', '.join(map(str, res.outputs))}")
+            if res.mscz and res.mscz not in res.outputs:
+                print(f"      MuseScore file: {res.mscz}")
             if logo and a.fmt == "pdf":
                 titles = res.prepared.titles if res.prepared else None
                 block = [titles.label, *titles.lines] if titles else []
@@ -79,7 +89,7 @@ def _cmd_parts(a: argparse.Namespace) -> int:
     print("MuseScore:", musescore.version())
     failed = 0
     for f in a.files:
-        res = render_parts(f, a.out)
+        res = render_parts(f, a.out, mscz=_mscz(a))
         if not res.ok:
             failed += 1
             print(f"FAIL  {res.source.name}\n{res.log}")
@@ -91,6 +101,8 @@ def _cmd_parts(a: argparse.Namespace) -> int:
                 f"      {part.output}: {part.pages} pages, "
                 f"system distance {part.system_distance:g} sp"
             )
+            if part.mscz:
+                print(f"      MuseScore file: {part.mscz}")
             if logo:
                 stamp = stamp_logo(
                     part.output, logo, color, margin=res.margin, title_block=[part.name, *lines]
@@ -113,7 +125,7 @@ def _cmd_audio(a: argparse.Namespace) -> int:
     failed = 0
     for f in a.files:
         try:
-            res = render_audio(f, a.out, a.settings.audio, midi=a.midi)
+            res = render_audio(f, a.out, a.settings.audio, midi=_midi(a))
         except ValueError as exc:
             print(f"ERROR: {exc}")
             return 2
@@ -138,7 +150,7 @@ def _cmd_audio(a: argparse.Namespace) -> int:
         for practice in res.practice:
             files = [f for f in (practice.mp3, practice.midi) if f is not None]
             print(f"      {', '.join(str(f) for f in files)}")
-        missing = [p.name for p in res.practice if p.mp3 is None or (a.midi and p.midi is None)]
+        missing = [p.name for p in res.practice if p.mp3 is None or (_midi(a) and p.midi is None)]
         if missing or not res.practice:
             print(f"      WARNING: practice files missing for {', '.join(missing) or 'all parts'}")
             print(res.log)
@@ -185,16 +197,22 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument(
         "--logo",
         type=Path,
-        help="logo for title block and header (default: env XSATZ_LOGO, then x-satz.conf)",
+        help="logo for title block and header (default: [theme] logo of x-satz.conf)",
     )
     s.add_argument(
         "--color",
         type=parse_color,
         help="accent colour of the header rule as #RRGGBB "
-        "(default: env XSATZ_COLOR, then x-satz.conf, else taken from the logo)",
+        "(default: [theme] color of x-satz.conf, else taken from the logo)",
     )
     s.add_argument("--out", type=Path, help="output directory (default: next to each input)")
     s.add_argument("--fmt", default="pdf", help="pdf, png, mscz, mid, musicxml ...")
+    s.add_argument(
+        "--mscz",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="also write MuseScore's file each PDF comes from (default: [output] mscz)",
+    )
     s.set_defaults(func=_cmd_render)
 
     s = sub.add_parser("parts", help="render one PDF per part of MusicXML files")
@@ -202,22 +220,33 @@ def build_parser() -> argparse.ArgumentParser:
     s.add_argument(
         "--logo",
         type=Path,
-        help="logo for title block and header (default: env XSATZ_LOGO, then x-satz.conf)",
+        help="logo for title block and header (default: [theme] logo of x-satz.conf)",
     )
     s.add_argument(
         "--color",
         type=parse_color,
         help="accent colour of the header rule as #RRGGBB "
-        "(default: env XSATZ_COLOR, then x-satz.conf, else taken from the logo)",
+        "(default: [theme] color of x-satz.conf, else taken from the logo)",
     )
     s.add_argument("--out", type=Path, help="output directory (default: next to each input)")
+    s.add_argument(
+        "--mscz",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="also write MuseScore's file each PDF comes from (default: [output] mscz)",
+    )
     s.set_defaults(func=_cmd_parts)
 
     s = sub.add_parser(
         "audio", help="write an MP3 of the band and a practice MP3 per part of MusicXML files"
     )
     s.add_argument("files", nargs="+", type=Path)
-    s.add_argument("--midi", action="store_true", help="write every file as MIDI as well")
+    s.add_argument(
+        "--midi",
+        action=argparse.BooleanOptionalAction,
+        default=None,
+        help="write every file as MIDI as well (default: [output] midi of x-satz.conf)",
+    )
     s.add_argument("--out", type=Path, help="output directory (default: next to each input)")
     s.set_defaults(func=_cmd_audio)
     return p
@@ -226,7 +255,7 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None, settings_file: Path | None = Path(SETTINGS_FILE)) -> int:
     """Run the command line with the settings in ``settings_file``, if there are any.
 
-    Command line options win over the environment, the environment wins over the settings.
+    Command line options win over the settings.
     """
     args = build_parser().parse_args(argv)
     try:

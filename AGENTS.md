@@ -116,7 +116,7 @@ input files and directories are always passed in, output directories are optiona
 to the directory of the input. Resources that ship with X-Satz, such as MuseScore styles, live
 inside the package (`src/xsatz/styles/`) and are loaded with `importlib.resources`.
 
-Personal and organisational data come from `x-satz.conf` or the environment at run time
+Personal and organisational data come from `x-satz.conf` or command line options at run time
 ([ADR 0003](docs/adr/0003-public-repository-without-protected-or-personal-data.md)).
 
 Engraving is done by MuseScore 4 on the command line
@@ -175,8 +175,8 @@ xsatz parts PIECE.musicxml --out OUT/parts          # one PDF per part
 xsatz audio PIECE.musicxml --out OUT/audio         # MP3 of the band and per part, --midi too
 ```
 
-The scores are originals. The logo reaches X-Satz only through `--logo` or the environment
-variable `XSATZ_LOGO`, its accent colour through `--color` or `XSATZ_COLOR`
+The scores are originals. The logo reaches X-Satz only through `--logo` or `[theme] logo` in
+`x-satz.conf`, its accent colour through `--color` or `[theme] color`
 ([ADR 0003](docs/adr/0003-public-repository-without-protected-or-personal-data.md)). The file
 names of the scores are those of the pieces. Do not copy them into the repository.
 

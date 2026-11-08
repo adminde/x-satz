@@ -7,7 +7,6 @@ relative to the texts MuseScore drew, so that a change of the style moves them a
 from __future__ import annotations
 
 import io
-import os
 import re
 from collections.abc import Sequence
 from dataclasses import dataclass, field
@@ -17,8 +16,6 @@ import numpy as np
 import pymupdf
 from PIL import Image
 
-LOGO_ENV = "XSATZ_LOGO"
-COLOR_ENV = "XSATZ_COLOR"
 # The running header ends with "page / pages", see the score style.
 PAGE_COUNT = re.compile(r"^\d+ / \d+$")
 HEX_COLOR = re.compile(r"^#?([0-9a-fA-F]{6})$")
@@ -44,12 +41,6 @@ class StampResult:
     warnings: list[str] = field(default_factory=list)
 
 
-def logo_from_env() -> Path | None:
-    """Path of the logo from the environment, or None when it is not configured."""
-    value = os.environ.get(LOGO_ENV, "").strip()
-    return Path(value) if value else None
-
-
 def parse_color(value: str) -> Color:
     """An accent colour written as #RRGGBB, as RGB values from 0 to 1."""
     match = HEX_COLOR.match(value.strip())
@@ -58,12 +49,6 @@ def parse_color(value: str) -> Color:
     digits = match.group(1)
     red, green, blue = (int(digits[i : i + 2], 16) / 255 for i in (0, 2, 4))
     return (red, green, blue)
-
-
-def color_from_env() -> Color | None:
-    """Accent colour from the environment, or None when it is not configured."""
-    value = os.environ.get(COLOR_ENV, "").strip()
-    return parse_color(value) if value else None
 
 
 @dataclass

@@ -44,11 +44,10 @@ Personal and organisational data:
   no copyright lines, no logos, no contact data and no credentials. The documentation only
   says which band the project comes from.
 - Texts of a piece, such as its title and credits, come from its MusicXML. Everything else
-  comes from configuration: command line options, environment variables and the settings
-  file `x-satz.conf`. The logo of the
-  band lives outside the repository and is passed with `--logo` or `XSATZ_LOGO`, its accent
-  colour with `--color` or `XSATZ_COLOR` as `#RRGGBB`. Without a colour X-Satz takes the
-  accent colour of the logo.
+  comes from configuration: the settings file `x-satz.conf` and command line options. The
+  logo of the band lives outside the repository and is passed with `[theme] logo` or
+  `--logo`, its accent colour with `[theme] color` or `--color` as `#RRGGBB`. Without a
+  colour X-Satz takes the accent colour of the logo.
 - `x-satz.conf`, `.env` files and other local configuration files are git-ignored, and a
   pre-commit hook rejects committed `x-satz.conf` and `.env` files. `x-satz.example.conf`
   documents the keys with neutral placeholders, and a test reads it.
@@ -56,8 +55,7 @@ Personal and organisational data:
   in. TOML groups settings in sections and is read by `tomllib` from the Python standard
   library. The section `[theme]` holds `logo` and `color`, and a relative logo path counts
   from the folder of the file. An unknown section or key stops the command with an error,
-  so that a typo does not go unnoticed. Variables set in the environment and command line
-  options win over the file. The API never reads a file on its own and takes every value as
+  so that a typo does not go unnoticed. Command line options win over the file. The API never reads a file on its own and takes every value as
   an argument ([ADR 0005](0005-package-independent-of-locations.md)).
 
 Package metadata in `pyproject.toml` (project name, authors, licence) is about the software,

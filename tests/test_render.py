@@ -82,6 +82,17 @@ def test_mscz_output_is_the_edited_file(tmp_path, fake_musescore):
         assert "copyright" in archive.read("score.mscx").decode("utf-8")
 
 
+def test_musescore_file_is_kept_next_to_the_pdf_on_request(tmp_path, fake_musescore):
+    res = render(DORICO_LIKE, tmp_path, mscz=True)
+
+    assert res.outputs == [tmp_path / "dorico_like.pdf"]
+    assert res.mscz == tmp_path / "dorico_like.mscz"
+    with zipfile.ZipFile(res.mscz) as archive:
+        assert "copyright" in archive.read("score.mscx").decode("utf-8")
+    assert render(DORICO_LIKE, tmp_path / "plain").mscz is None
+    assert not (tmp_path / "plain" / "dorico_like.mscz").exists()
+
+
 def test_raw_render_reads_the_original(tmp_path, fake_musescore):
     res = render(DORICO_LIKE, tmp_path, prepared=False)
 

@@ -18,6 +18,7 @@ SETTINGS_FILE = "x-satz.conf"
 KEYS = {
     "theme": {"logo", "color"},
     "audio": {"softer", "reverb", "count_in", "transpose", "sounds", "soundfont_dir"},
+    "output": {"mscz", "midi"},
 }
 COUNT_IN_KEYS = {"key", "dynamic"}
 SOUND_KEYS = {"soundfont", "bank", "program", "swell", "fade_in"}
@@ -29,6 +30,10 @@ class Settings:
     logo: Path | None = None
     color: str | None = None
     audio: AudioSettings = field(default_factory=AudioSettings)
+    # Whether render and parts write MuseScore's file next to every PDF.
+    mscz: bool = False
+    # Whether audio writes every file as MIDI as well.
+    midi: bool = False
 
 
 def read_settings(path: str | Path) -> Settings:
@@ -58,10 +63,16 @@ def read_settings(path: str | Path) -> Settings:
         audio = _audio(data.get("audio", {}), path.parent)
     except (TypeError, ValueError) as exc:
         raise ValueError(f"{path}: [audio] {exc}") from exc
+    output = data.get("output", {})
+    for key in KEYS["output"]:
+        if not isinstance(output.get(key, False), bool):
+            raise ValueError(f"{path}: [output] {key} must be true or false")
     return Settings(
         logo=path.parent / logo if logo else None,
         color=color or None,
         audio=audio,
+        mscz=output.get("mscz", False),
+        midi=output.get("midi", False),
     )
 
 

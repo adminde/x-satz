@@ -211,3 +211,16 @@ def test_a_tempo_without_title_goes_beside_the_mark():
     assert tempo.x0 + right * 5.0 == pytest.approx(122 + 5.0, abs=0.5)
     assert (tempo.y0 + tempo.y1) / 2 + down * 5.0 == pytest.approx(114, abs=0.5)
     doc.close()
+
+
+def test_musescore_files_of_the_parts_are_kept_as_exported(tmp_path, fake_musescore):
+    res = render_parts(DORICO_LIKE, tmp_path, mscz=True)
+
+    drums = {part.name: part for part in res.parts}["Drums"]
+    assert drums.mscz == tmp_path / "dorico_like - Drums.mscz"
+    with zipfile.ZipFile(drums.mscz) as archive:
+        style = ET.fromstring(archive.read("score_style.mss"))
+        assert b"LayoutBreak" in archive.read("Part.mscx")
+    # The file holds the distance and the system break the PDF was exported with.
+    assert float(style.findtext("Style/minSystemDistance")) == FALLBACK_DISTANCES[-1]
+    assert render_parts(DORICO_LIKE, tmp_path / "plain").parts[0].mscz is None

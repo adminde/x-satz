@@ -13,12 +13,13 @@ def test_info_command(capsys):
 
 
 def _parts_with_theme(monkeypatch, tmp_path, pages=2):
-    """Run ``parts`` with stand-ins and return the logo and colour it stamps with."""
+    """Run ``parts`` with stand-ins and return the logo, colour and mscz wish they get."""
     from xsatz import musescore, parts, theme
 
     stamped = {}
 
-    def render_parts(source, out_dir=None):
+    def render_parts(source, out_dir=None, mscz=False):
+        stamped["mscz"] = mscz
         pdf = tmp_path / "piece - Horn.pdf"
         pdf.write_text("pdf")
         return parts.PartsResult(Path(source), [parts.Part("Horn", pdf, pages, 12.0)], "")
@@ -36,8 +37,6 @@ def _parts_with_theme(monkeypatch, tmp_path, pages=2):
 def test_settings_file_gives_logo_and_colour(tmp_path, monkeypatch):
     conf = tmp_path / "x-satz.conf"
     conf.write_text('[theme]\nlogo = "logo.svg"\ncolor = "#711611"\n', encoding="utf-8")
-    monkeypatch.delenv("XSATZ_LOGO", raising=False)
-    monkeypatch.delenv("XSATZ_COLOR", raising=False)
     stamped = _parts_with_theme(monkeypatch, tmp_path)
 
     assert main(["parts", str(FIXTURE)], settings_file=conf) == 0
@@ -46,16 +45,15 @@ def test_settings_file_gives_logo_and_colour(tmp_path, monkeypatch):
     assert stamped["color"] == pytest.approx((0x71 / 255, 0x16 / 255, 0x11 / 255))
 
 
-def test_options_and_environment_win_over_the_settings_file(tmp_path, monkeypatch):
+def test_options_win_over_the_settings_file(tmp_path, monkeypatch):
     conf = tmp_path / "x-satz.conf"
     conf.write_text('[theme]\nlogo = "logo.svg"\ncolor = "#711611"\n', encoding="utf-8")
-    monkeypatch.setenv("XSATZ_LOGO", str(tmp_path / "env.svg"))
-    monkeypatch.setenv("XSATZ_COLOR", "#000000")
     stamped = _parts_with_theme(monkeypatch, tmp_path)
+    options = ["--logo", str(tmp_path / "other.svg"), "--color", "#FFFFFF"]
 
-    assert main(["parts", str(FIXTURE), "--color", "#FFFFFF"], settings_file=conf) == 0
+    assert main(["parts", str(FIXTURE), *options], settings_file=conf) == 0
 
-    assert stamped["logo"] == tmp_path / "env.svg"
+    assert stamped["logo"] == tmp_path / "other.svg"
     assert stamped["color"] == (1.0, 1.0, 1.0)
 
 
@@ -68,7 +66,6 @@ def test_broken_settings_file_stops_with_an_error(tmp_path, capsys):
 
 
 def test_parts_command_warns_about_parts_longer_than_two_pages(tmp_path, monkeypatch, capsys):
-    monkeypatch.delenv("XSATZ_LOGO", raising=False)
     _parts_with_theme(monkeypatch, tmp_path, pages=3)
 
     assert main(["parts", str(FIXTURE)], settings_file=None) == 0
@@ -76,3 +73,53 @@ def test_parts_command_warns_about_parts_longer_than_two_pages(tmp_path, monkeyp
     out = capsys.readouterr().out
     assert "piece - Horn.pdf: 3 pages, system distance 12 sp" in out
     assert "WARNING: Horn needs more than 2 pages" in out
+
+
+OUTPUT_MSCZ = "[output]\nmscz = true\n"
+
+
+@pytest.mark.parametrize(
+    ("conf", "option", "kept"),
+    [
+        ("", [], False),
+        (OUTPUT_MSCZ, [], True),
+        (OUTPUT_MSCZ, ["--no-mscz"], False),
+        ("", ["--mscz"], True),
+    ],
+)
+def test_mscz_option_wins_over_the_settings_file(tmp_path, monkeypatch, conf, option, kept):
+    settings = tmp_path / "x-satz.conf"
+    settings.write_text(conf, encoding="utf-8")
+    stamped = _parts_with_theme(monkeypatch, tmp_path)
+
+    assert main(["parts", str(FIXTURE), *option], settings_file=settings) == 0
+
+    assert stamped["mscz"] is kept
+
+
+@pytest.mark.parametrize(
+    ("conf", "option", "midi"),
+    [
+        ("", [], False),
+        ("[output]\nmidi = true\n", [], True),
+        ("[output]\nmidi = true\n", ["--no-midi"], False),
+        ("", ["--midi"], True),
+    ],
+)
+def test_midi_option_wins_over_the_settings_file(tmp_path, monkeypatch, conf, option, midi):
+    from xsatz import audio, musescore
+
+    settings = tmp_path / "x-satz.conf"
+    settings.write_text(conf, encoding="utf-8")
+    asked = {}
+
+    def render_audio(source, out_dir=None, sounds=None, midi=False):
+        asked["midi"] = midi
+        raise ValueError("stops here")
+
+    monkeypatch.setattr(musescore, "version", lambda: "4.7")
+    monkeypatch.setattr(audio, "render_audio", render_audio)
+
+    assert main(["audio", str(FIXTURE), *option], settings_file=settings) == 2
+
+    assert asked["midi"] is midi

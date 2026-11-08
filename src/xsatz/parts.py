@@ -61,6 +61,8 @@ class Part:
     breaks: int = 0
     # Texts that still run past the right margin.
     beyond_margin: list[str] = field(default_factory=list)
+    # MuseScore's file the PDF was exported from, when it was asked for.
+    mscz: Path | None = None
 
 
 @dataclass
@@ -87,7 +89,9 @@ def part_file_name(stem: str, name: str, suffix: str = "pdf") -> str:
     return f"{stem} - {UNSAFE.sub('_', name).strip()}.{suffix}"
 
 
-def render_parts(source: str | Path, out_dir: str | Path | None = None) -> PartsResult:
+def render_parts(
+    source: str | Path, out_dir: str | Path | None = None, mscz: bool = False
+) -> PartsResult:
     """Render every part of ``source`` as a PDF of its own.
 
     Without ``out_dir`` the parts are written next to ``source``. MuseScore imports a prepared
@@ -97,7 +101,8 @@ def render_parts(source: str | Path, out_dir: str | Path | None = None) -> Parts
     closer, at each of the FALLBACK_DISTANCES in turn.
     After the first export the texts at every rehearsal mark move beside the mark, and the
     part is exported again. A part with a text past the right margin gets a system break
-    before the measure of that text and is exported again first.
+    before the measure of that text and is exported again first. With ``mscz`` MuseScore's
+    file of every part, as its PDF was exported from it, is written next to the PDF.
     """
     source = Path(source)
     out_dir = Path(out_dir) if out_dir is not None else source.parent
@@ -117,12 +122,12 @@ def render_parts(source: str | Path, out_dir: str | Path | None = None) -> Parts
         log += extracted.stderr
         pending: list[tuple[Part, Path]] = []
         for index, (name, data) in enumerate(_extracted_parts(extracted.stdout)):
-            mscz = Path(work) / f"part-{index}.mscz"
-            mscz.write_bytes(data)
-            edit_part(mscz, name, part_style)
+            file = Path(work) / f"part-{index}.mscz"
+            file.write_bytes(data)
+            edit_part(file, name, part_style)
             part = Part(name, out_dir / part_file_name(source.stem, name))
-            part.system_distance = system_distance(mscz)
-            pending.append((part, mscz))
+            part.system_distance = system_distance(file)
+            pending.append((part, file))
         files = list(pending)
         rounds: dict[str, int] = {}
         settled: set[str] = set()
@@ -132,8 +137,8 @@ def render_parts(source: str | Path, out_dir: str | Path | None = None) -> Parts
         # viewer meanwhile stops nothing but the last copy.
         while pending:
             # An old file must not pass for the result of a failed export.
-            for _, mscz in pending:
-                mscz.with_suffix(".pdf").unlink(missing_ok=True)
+            for _, file in pending:
+                file.with_suffix(".pdf").unlink(missing_ok=True)
             job = Path(work) / "job.json"
             job.write_text(
                 json.dumps([{"in": str(m), "out": str(m.with_suffix(".pdf"))} for _, m in pending]),
@@ -141,19 +146,19 @@ def render_parts(source: str | Path, out_dir: str | Path | None = None) -> Parts
             )
             log += _run(["-j", str(job)])
             too_long = []
-            for part, mscz in pending:
-                pdf = mscz.with_suffix(".pdf")
+            for part, file in pending:
+                pdf = file.with_suffix(".pdf")
                 if rounds.get(part.name, 0) < ARRANGE_ROUNDS:
                     rounds[part.name] = rounds.get(part.name, 0) + 1
-                    if _arrange_marks(pdf, mscz, margin, right, spatium):
-                        too_long.append((part, mscz))
+                    if _arrange_marks(pdf, file, margin, right, spatium):
+                        too_long.append((part, file))
                         continue
                 part.pages = _page_count(pdf)
                 part.beyond_margin = _beyond_margin(pdf, right)
-                added = sum(break_before_text(mscz, text) for text in part.beyond_margin)
+                added = sum(break_before_text(file, text) for text in part.beyond_margin)
                 if added:
                     part.breaks += added
-                    too_long.append((part, mscz))
+                    too_long.append((part, file))
                     continue
                 if part.pages <= MAX_PAGES or part.name in settled:
                     continue
@@ -169,15 +174,18 @@ def render_parts(source: str | Path, out_dir: str | Path | None = None) -> Parts
                     distance = normal
                     settled.add(part.name)
                 part.system_distance = distance
-                set_system_distance(mscz, distance)
-                too_long.append((part, mscz))
+                set_system_distance(file, distance)
+                too_long.append((part, file))
             pending = too_long
-        for part, mscz in files:
-            pdf = mscz.with_suffix(".pdf")
+        for part, file in files:
+            pdf = file.with_suffix(".pdf")
             if pdf.exists():
                 shutil.copyfile(pdf, part.output)
             else:
                 part.output.unlink(missing_ok=True)
+            if mscz and pdf.exists():
+                part.mscz = part.output.with_suffix(".mscz")
+                shutil.copyfile(file, part.mscz)
     return PartsResult(source, [part for part, _ in files], log[-2000:], info, margin)
 
 

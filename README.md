@@ -105,8 +105,10 @@ Options of `render`:
 | `--color #RRGGBB` | Accent colour of the header rule |
 | `--style FILE.mss` | Another MuseScore style instead of the X-Satz score style |
 | `--raw` | Renders the original exactly as MuseScore imports it, without stages and style, to see what X-Satz changes |
+| `--mscz` | Also writes MuseScore's file the PDF is exported from, `SCORE.mscz`, to open and check it in MuseScore. Logo and rules are only in the PDF. `--no-mscz` turns it off when `x-satz.conf` turns it on. |
 
-`parts` takes `--out`, `--logo` and `--color` as well. Every part is set on A4 portrait with
+`parts` takes `--out`, `--logo`, `--color` and `--mscz` as well, the last writes `SCORE - PART.mscz`
+next to every part, in the state its PDF was exported from. Every part is set on A4 portrait with
 a staff space of 1.75 mm and 12 staff spaces between its systems. When a third page would
 hold only one or two systems, X-Satz tries 10 and then 8 staff spaces. A part that still needs more
 than two pages is kept, and X-Satz prints a warning. The reasons are recorded in
@@ -114,10 +116,10 @@ than two pages is kept, and X-Satz prints a warning. The reasons are recorded in
 
 ## Configuration
 
-Values that belong to a band or a person are never part of X-Satz. Pass them on the command
-line, set them in the environment, or put them into `x-satz.conf`, a TOML file in the folder
-you run `xsatz` from (start from [`x-satz.example.conf`](x-satz.example.conf)). Command line
-options win over the environment, and the environment wins over the file.
+Values that belong to a band or a person are never part of X-Satz. Put them into
+`x-satz.conf`, a TOML file in the folder you run `xsatz` from (start from
+[`x-satz.example.conf`](x-satz.example.conf)), or pass them on the command line. Command line
+options win over the file.
 
 ```toml
 [theme]
@@ -125,11 +127,15 @@ logo = "brand/logo.svg"   # relative to the folder of x-satz.conf
 color = "#D6001C"
 ```
 
-| `x-satz.conf` | Variable | Option | Meaning |
-|---|---|---|---|
-| `[theme] logo` | `XSATZ_LOGO` | `--logo` | Logo stamped into title block and running header, PNG or SVG. In an SVG, convert text to paths. Without a logo the PDF has none. |
-| `[theme] color` | `XSATZ_COLOR` | `--color` | Accent colour of the rules as `#RRGGBB`. Without it X-Satz takes the accent colour of the logo. |
-| | `MSCORE` | | Path to the MuseScore executable, when it is not found automatically |
+| `x-satz.conf` | Option | Meaning |
+|---|---|---|
+| `[theme] logo` | `--logo` | Logo stamped into title block and running header, PNG or SVG. In an SVG, convert text to paths. Without a logo the PDF has none. |
+| `[theme] color` | `--color` | Accent colour of the rules as `#RRGGBB`. Without it X-Satz takes the accent colour of the logo. |
+| `[output] mscz` | `--mscz`, `--no-mscz` | `true` writes MuseScore's file next to every PDF of `render` and `parts`. |
+| `[output] midi` | `--midi`, `--no-midi` | `true` makes `audio` write every file as MIDI as well. |
+
+When MuseScore is not found in its usual install locations, set the environment variable
+`MSCORE` to its executable.
 
 Without an `[audio]` section `xsatz audio` plays the score as written, with MuseScore's own
 SoundFont MS Basic and without a count-in. The section changes that:
