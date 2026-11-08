@@ -12,9 +12,9 @@ Proposed
 
 Describe the forces at play: musical, technical and organisational (club use, licences,
 copyright). Point out where they pull against each other. Stay value neutral and state facts
-that a reader can check, with references to modules, files, commits or `xsatz compare`
-results. Findings from experiments that support the decision belong here, and so do options
-that were weighed.
+that a reader can check, with references to modules, files, commits or measurements.
+Findings from experiments that support the decision belong here, and so do options that were
+weighed.
 
 ## Decision
 

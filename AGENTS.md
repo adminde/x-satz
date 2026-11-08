@@ -50,11 +50,11 @@ rev in `.pre-commit-config.yaml`; change both together.
   `git add -A` or `git add .`.
 - Write commit messages as one English sentence in the imperative, subject at most 72
   characters, for example `Match the page margins of Dorico`. One commit per coherent change.
-- Give new code tests (`pytest`). Back every style or preprocessing change with
-  `xsatz compare` before and after, and look at the comparison images.
+- Give new code tests (`pytest`). Look at the pages before and after every style or
+  preprocessing change.
 - Invent nothing: no measurements, figures or data that were not collected. What was not
   measured is called "not collected". Claim nothing you have not seen: a green gate is no
-  acceptance, and a compare figure is no substitute for looking at the pages.
+  acceptance.
 - Propose an ADR when a decision matches the triggers in [docs/adr/README.md](docs/adr/README.md).
 - Build only what the current task needs. Delete dead code.
 
@@ -132,7 +132,7 @@ path, no interactive input, no global state.
 
 ```
 src/xsatz/
-  cli.py        # argparse subcommands: doctor, info, render, parts, compare
+  cli.py        # argparse subcommands: doctor, info, render, parts
   musescore.py  # find MuseScore (env MSCORE) and run it headless
   xmlinfo.py    # MusicXML analysis (.musicxml/.xml/.mxl)
   config.py     # x-satz.conf for the command line, never read by the API (ADR 0003)
@@ -141,7 +141,6 @@ src/xsatz/
   parts.py      # one PDF per part, extracted by MuseScore and fitted to 2 pages (ADR 0009)
   mscz.py       # edits of MuseScore's own files between import and export (ADR 0008, 0009)
   theme.py      # logo and accent rules stamped into the finished PDF (ADR 0008)
-  compare.py    # reference PDF vs. generated PDF, images and metrics
   styles/       # score.mss and part.mss, the styles shipped with the package
 tests/          # pytest, fixtures: entchen.musicxml (public domain), dorico_like.musicxml (self-made)
 tools/gates/    # the gate, verify.py
@@ -170,7 +169,6 @@ elsewhere with `--out`:
 xsatz render PIECE.musicxml --out OUT --logo LOGO.png
 xsatz render PIECE.musicxml --out OUT/raw --raw     # as MuseScore imports it
 xsatz parts PIECE.musicxml --out OUT/parts          # one PDF per part
-xsatz compare REFERENCE.pdf OUT/PIECE.pdf --out OUT/compare
 ```
 
 The scores are originals. The logo reaches X-Satz only through `--logo` or the environment

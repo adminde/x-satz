@@ -17,8 +17,8 @@ alternatives that were not evaluated: LilyPond needs a MusicXML converter of its
 renders SVG for the web rather than print.
 
 The raw import of the reference score into MuseScore 4.7 showed that a style alone cannot get
-close to the original. These findings come from `xsatz compare`, the content check and tests
-with the public domain fixture:
+close to the original. These findings come from page by page comparisons with the Dorico
+PDF, the content check and tests with the public domain fixture:
 
 - Dorico writes title block, headers and footers as `<credit>` elements with absolute
   positions on every page. MuseScore turned them into frames, one of them carried a page
@@ -77,8 +77,9 @@ reference score comes out with its page count, complete content including rehear
 and percussion noteheads, brackets as in the original and the X-Satz title block.
 
 X-Satz depends on how MuseScore treats its input, and it writes MuseScore's own file format,
-which is no public interface. Every MuseScore update is checked with the gate, `xsatz compare`
-and the content check, and the MuseScore version is pinned wherever PDFs must be reproducible.
+which is no public interface. Every MuseScore update is checked with the gate, by looking at
+the pages and with the content check, and the MuseScore version is pinned wherever PDFs must be
+reproducible.
 Rendering starts MuseScore twice. The `.mscz` carries no logo, only the PDF does. The drum keys
 of the percussion entries only tell entries apart and are no General MIDI sounds, so practice
 MIDIs in phase 3 need a mapping to real sounds. Comments of the original MusicXML are not

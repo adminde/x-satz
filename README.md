@@ -26,8 +26,7 @@ MusicXML export and produces these files on its own, with free software only.
 - **Designs the title block and running header** with your band's logo and accent colour,
   passed in as configuration, never stored in the repository.
 - **Keeps the page printable:** nothing sits closer than 5 mm to the edge of the paper.
-- **Inspects and compares:** `xsatz info` shows what a MusicXML file carries, and
-  `xsatz compare` puts the result next to a reference PDF, page by page.
+- **Inspects:** `xsatz info` shows what a MusicXML file carries.
 
 The original MusicXML file is never changed.
 
@@ -90,7 +89,6 @@ This writes one PDF per instrument, such as `march - Trumpet 1.pdf`, next to `ma
 | `xsatz info SCORE.musicxml` | Shows page layout, fonts, credits, parts, breaks and playing aids of a MusicXML file |
 | `xsatz render SCORE.musicxml` | Renders the full score as PDF |
 | `xsatz parts SCORE.musicxml` | Renders one PDF per part, `SCORE - PART.pdf` |
-| `xsatz compare REFERENCE.pdf SCORE.pdf` | Compares two PDFs page by page and writes side by side and overlay images |
 
 Options of `render`:
 

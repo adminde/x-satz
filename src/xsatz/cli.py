@@ -106,13 +106,6 @@ def _cmd_parts(a: argparse.Namespace) -> int:
     return 1 if failed else 0
 
 
-def _cmd_compare(a: argparse.Namespace) -> int:
-    from xsatz.compare import compare, format_result
-
-    print(format_result(compare(a.ref, a.new, a.out, a.dpi)))
-    return 0
-
-
 def _cmd_doctor(_: argparse.Namespace) -> int:
     print(f"xsatz {__version__}, Python {sys.version.split()[0]}")
     try:
@@ -180,15 +173,6 @@ def build_parser() -> argparse.ArgumentParser:
     )
     s.add_argument("--out", type=Path, help="output directory (default: next to each input)")
     s.set_defaults(func=_cmd_parts)
-
-    s = sub.add_parser("compare", help="compare a reference PDF with a generated PDF")
-    s.add_argument("ref", type=Path)
-    s.add_argument("new", type=Path)
-    s.add_argument(
-        "--out", type=Path, help="image directory (default: <new stem>-compare next to new)"
-    )
-    s.add_argument("--dpi", type=int, default=60)
-    s.set_defaults(func=_cmd_compare)
     return p
 
 
