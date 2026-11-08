@@ -8,7 +8,8 @@ Stages:
   pytest      the test suite.
   render      prepares and renders the public domain fixture with the score style through
               MuseScore and expects a PDF with at least one page, then renders the parts of
-              the self-made fixture and expects one PDF per part with at least one page.
+              the self-made fixture and expects one PDF per part with at least one page,
+              and writes its MP3s and MIDIs and expects one practice MP3 and MIDI per part.
               Without MuseScore the stage is "not checked".
 
 A stage that cannot run because a part of the environment is missing is "not checked".
@@ -84,6 +85,7 @@ def stage_render() -> int:
         return NOT_CHECKED
     import pymupdf
 
+    from xsatz.audio import render_audio
     from xsatz.parts import render_parts
     from xsatz.render import default_style, render
 
@@ -102,7 +104,15 @@ def stage_render() -> int:
             return RED
         for part in parts.parts:
             print(f"{part.output.name}: {part.pages} page(s)")
-        return GREEN if all(part.pages >= 1 for part in parts.parts) else RED
+        if not all(part.pages >= 1 for part in parts.parts):
+            return RED
+        audio = render_audio(PARTS_FIXTURE, out, midi=True)
+        if not audio.ok:
+            print(audio.log)
+            return RED
+        files = [f for p in audio.practice for f in (p.mp3, p.midi) if f is not None]
+        print(f"{audio.full.name}: {len(files)} practice MP3s and MIDIs")
+        return GREEN if len(files) == 2 * len(parts.parts) and audio.full_midi else RED
 
 
 STAGES: tuple[tuple[str, Callable[[], int]], ...] = (

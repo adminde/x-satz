@@ -132,15 +132,18 @@ path, no interactive input, no global state.
 
 ```
 src/xsatz/
-  cli.py        # argparse subcommands: doctor, info, render, parts
+  cli.py        # argparse subcommands: doctor, info, render, parts, audio
   musescore.py  # find MuseScore (env MSCORE) and run it headless
   xmlinfo.py    # MusicXML analysis (.musicxml/.xml/.mxl)
   config.py     # x-satz.conf for the command line, never read by the API (ADR 0003)
   prepare.py    # prepared copy of the MusicXML before MuseScore reads it (ADR 0008)
   render.py     # MusicXML -> pdf/png/mscz/mid through MuseScore, prepared and styled
   parts.py      # one PDF per part, extracted by MuseScore and fitted to 2 pages (ADR 0009)
-  mscz.py       # edits of MuseScore's own files between import and export (ADR 0008, 0009)
+  mscz.py       # edits of MuseScore's own files between import and export (ADR 0008-0010)
   theme.py      # logo and accent rules stamped into the finished PDF (ADR 0008)
+  sounds.py     # sounding copy of the MusicXML and the sounds of the parts (ADR 0010)
+  audio.py      # MP3 and MIDI of the band and one practice file per part (ADR 0010)
+  soundfont.py  # shaped copies of SF2 SoundFonts: later sample starts, shorter fade-ins
   styles/       # score.mss and part.mss, the styles shipped with the package
 tests/          # pytest, fixtures: entchen.musicxml (public domain), dorico_like.musicxml (self-made)
 tools/gates/    # the gate, verify.py
@@ -169,6 +172,7 @@ elsewhere with `--out`:
 xsatz render PIECE.musicxml --out OUT --logo LOGO.png
 xsatz render PIECE.musicxml --out OUT/raw --raw     # as MuseScore imports it
 xsatz parts PIECE.musicxml --out OUT/parts          # one PDF per part
+xsatz audio PIECE.musicxml --out OUT/audio         # MP3 of the band and per part, --midi too
 ```
 
 The scores are originals. The logo reaches X-Satz only through `--logo` or the environment

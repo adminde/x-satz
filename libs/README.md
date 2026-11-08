@@ -17,3 +17,14 @@ MuseScore takes fonts from the operating system.
 - Linux: copy the `.otf` and `.ttf` files to `~/.local/share/fonts/` (or `/usr/local/share/fonts/`) and run
   `fc-cache -f`.
 - macOS: open the `.otf` and `.ttf` files and click "Install".
+
+## SoundFonts
+
+SoundFonts for `xsatz audio` are not part of the repository. They are hundreds of megabytes
+each, and some are not under a free licence. A local copy may lie in `libs/sounds/`, which
+git ignores. MuseScore finds a SoundFont only in its SoundFont folder, which the setting
+`soundfont_dir` names.
+
+| SoundFont | Licence | Source |
+|---|---|---|
+| Sonatina Symphonic Orchestra (SF2) | Creative Commons Sampling Plus 1.0 | https://ftp.osuosl.org/pub/musescore/soundfont/Sonatina_Symphonic_Orchestra_SF2.zip |

@@ -1,19 +1,24 @@
+import json
 import xml.etree.ElementTree as ET
 import zipfile
 
 import pytest
 
 from xsatz.mscz import (
+    AudioTrack,
     add_copyright_frame,
     break_before_text,
     edit_part,
     mark_groups,
     place_beside_mark,
+    play_unisons_once,
     reads_as,
+    set_audio,
     set_system_distance,
     shrink_blank_lines,
     system_distance,
 )
+from xsatz.sounds import Sound
 
 MEASURE = "<Measure><voice><Rest><durationType>measure</durationType></Rest></voice></Measure>"
 BREAK = "<LayoutBreak><subtype>page</subtype></LayoutBreak>"
@@ -306,3 +311,79 @@ def test_an_unreadable_glyph_in_a_pdf_text_stands_for_any_character(tmp_path):
     path = _mscz(tmp_path / "part.mscz", MEASURE + SECTION.replace("Stick Together", "Quick"))
 
     assert break_before_text(path, "�uick")
+
+
+def test_set_audio_writes_sound_volume_and_reverb_per_part(tmp_path):
+    path = tmp_path / "score.mscz"
+    score = (
+        '<museScore><Score><Part id="1"><Instrument id="trumpet"/></Part>'
+        '<Part id="2"><Instrument id="drumset"/></Part></Score></museScore>'
+    )
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr("score.mscx", score)
+        archive.writestr("audiosettings.json", '{"activeSoundProfile": "MuseScore Basic"}')
+
+    tracks = [
+        AudioTrack(Sound("Sonatina", 0, 27), -12.0, 0.3),
+        AudioTrack(Sound("MS Basic")),
+    ]
+    assert set_audio(path, tracks) == 2
+
+    with zipfile.ZipFile(path) as archive:
+        settings = json.loads(archive.read("audiosettings.json"))
+    first, second = settings["tracks"]
+    assert settings["activeSoundProfile"] == "MuseScore Basic"
+    assert (first["partId"], first["instrumentId"]) == ("1", "trumpet")
+    meta = first["in"]["resourceMeta"]
+    assert meta["id"] == "Sonatina\\0\\27" and meta["type"] == "fluid_soundfont"
+    assert meta["attributes"]["presetProgram"] == "27"
+    assert first["out"]["volumeDb"] == -12.0
+    assert first["out"]["auxSends"][0]["signalAmount"] == 0.3
+    # Without a program the SoundFont chooses, without reverb MuseScore sends its default.
+    assert second["in"]["resourceMeta"]["id"] == "MS Basic"
+    assert "auxSends" not in second["out"]
+
+
+def _unison_score(path):
+    """Three parts, the first with two staves; one group in all parts, one in parts 2 and 3."""
+    red = '<color r="0" g="0" b="1" a="255"/>'
+    blue = '<color r="0" g="0" b="2" a="255"/>'
+
+    def staff(n, *notes):
+        chords = "".join(f"<Chord><Note>{c}<pitch>60</pitch></Note></Chord>" for c in notes)
+        return f'<Staff id="{n}"><Measure><voice>{chords}</voice></Measure></Staff>'
+
+    parts = (
+        '<Part id="1"><Staff/><Staff/></Part><Part id="2"><Staff/></Part>'
+        '<Part id="3"><Staff/></Part>'
+    )
+    score = parts + staff(1, red) + staff(2, "") + staff(3, red, blue) + staff(4, red, blue)
+    with zipfile.ZipFile(path, "w") as archive:
+        archive.writestr("score.mscx", f"<museScore><Score>{score}</Score></museScore>")
+
+
+def _played(path):
+    with zipfile.ZipFile(path) as archive:
+        score = ET.fromstring(archive.read("score.mscx")).find("Score")
+    return {
+        staff.get("id"): [n.findtext("play") != "0" for n in staff.iter("Note")]
+        for staff in score.findall("Staff")
+    }
+
+
+def test_play_unisons_once_keeps_the_first_part_of_every_group(tmp_path):
+    path = tmp_path / "score.mscz"
+    _unison_score(path)
+
+    assert play_unisons_once(path) == 3
+
+    assert _played(path) == {"1": [True], "2": [True], "3": [False, True], "4": [False, False]}
+
+
+def test_play_unisons_once_keeps_the_front_part(tmp_path):
+    path = tmp_path / "score.mscz"
+    _unison_score(path)
+
+    assert play_unisons_once(path, front=2) == 3
+
+    assert _played(path) == {"1": [False], "2": [True], "3": [False, False], "4": [True, True]}

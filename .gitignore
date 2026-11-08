@@ -1,6 +1,9 @@
 # Local development data: copyrighted scores and results, never committed (ADR 0003)
 data/
 
+# Local SoundFonts: hundreds of megabytes each and not all under a free licence (ADR 0010)
+libs/sounds/
+
 # Local configuration and secrets (ADR 0003)
 x-satz.conf
 .env

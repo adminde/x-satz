@@ -106,6 +106,45 @@ def _cmd_parts(a: argparse.Namespace) -> int:
     return 1 if failed else 0
 
 
+def _cmd_audio(a: argparse.Namespace) -> int:
+    from xsatz.audio import render_audio
+
+    print("MuseScore:", musescore.version())
+    failed = 0
+    for f in a.files:
+        try:
+            res = render_audio(f, a.out, a.settings.audio, midi=a.midi)
+        except ValueError as exc:
+            print(f"ERROR: {exc}")
+            return 2
+        if not res.ok:
+            failed += 1
+            print(f"FAIL  {res.source.name}\n{res.log}")
+            continue
+        print(f"OK    {res.source.name} -> {res.full}")
+        if res.sounds:
+            p = res.sounds
+            print(
+                f"      {len(p.transposed)} parts transposed, {p.drum_keys} drum keys, "
+                f"{p.open_hi_hats} open hi-hats, count-in of {p.count_in_bars} bars "
+                f"with {p.count_in_clicks} clicks, {p.unisons} unisons played once"
+            )
+            for name in p.unmapped:
+                print(f"      WARNING: no General MIDI drum key for {name!r}")
+        for shaped in res.shaped:
+            print(f"      plays the shaped SoundFont {shaped}")
+        if res.full_midi:
+            print(f"      {res.full_midi}")
+        for practice in res.practice:
+            files = [f for f in (practice.mp3, practice.midi) if f is not None]
+            print(f"      {', '.join(str(f) for f in files)}")
+        missing = [p.name for p in res.practice if p.mp3 is None or (a.midi and p.midi is None)]
+        if missing or not res.practice:
+            print(f"      WARNING: practice files missing for {', '.join(missing) or 'all parts'}")
+            print(res.log)
+    return 1 if failed else 0
+
+
 def _cmd_doctor(_: argparse.Namespace) -> int:
     print(f"xsatz {__version__}, Python {sys.version.split()[0]}")
     try:
@@ -173,6 +212,14 @@ def build_parser() -> argparse.ArgumentParser:
     )
     s.add_argument("--out", type=Path, help="output directory (default: next to each input)")
     s.set_defaults(func=_cmd_parts)
+
+    s = sub.add_parser(
+        "audio", help="write an MP3 of the band and a practice MP3 per part of MusicXML files"
+    )
+    s.add_argument("files", nargs="+", type=Path)
+    s.add_argument("--midi", action="store_true", help="write every file as MIDI as well")
+    s.add_argument("--out", type=Path, help="output directory (default: next to each input)")
+    s.set_defaults(func=_cmd_audio)
     return p
 
 

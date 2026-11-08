@@ -43,3 +43,4 @@ of the record whose decision they support.
 | [0007](0007-a-change-is-done-when-the-gate-is-green.md) | A change is done when the gate is green | Accepted |
 | [0008](0008-musescore-4-and-the-stages-around-it.md) | MuseScore 4 engraves, X-Satz works in stages around it | Accepted |
 | [0009](0009-layout-of-the-full-score-and-the-parts.md) | Layout of the full score and the parts | Proposed |
+| [0010](0010-practice-files-play-the-score.md) | Practice files play the score as written unless the band configures them | Proposed |

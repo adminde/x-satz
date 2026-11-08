@@ -23,6 +23,10 @@ MusicXML export and produces these files on its own, with free software only.
 - **Keeps the playing aids:** valve combinations, slide positions and timpani sticking that
   Dorico writes as lyrics under the notes, with their extender lines.
 - **Handles percussion kits** with several instruments, voices and noteheads per staff.
+- **Writes practice files:** an MP3 of the whole band and one practice MP3 per part in which
+  the other parts play softer, on request also as MIDI, with General MIDI drum sounds.
+  Transpositions, a count-in and the sounds of the MP3s are settings, for a band whose
+  brass read in C and play in B flat, for example.
 - **Designs the title block and running header** with your band's logo and accent colour,
   passed in as configuration, never stored in the repository.
 - **Keeps the page printable:** nothing sits closer than 5 mm to the edge of the paper.
@@ -89,6 +93,7 @@ This writes one PDF per instrument, such as `march - Trumpet 1.pdf`, next to `ma
 | `xsatz info SCORE.musicxml` | Shows page layout, fonts, credits, parts, breaks and playing aids of a MusicXML file |
 | `xsatz render SCORE.musicxml` | Renders the full score as PDF |
 | `xsatz parts SCORE.musicxml` | Renders one PDF per part, `SCORE - PART.pdf` |
+| `xsatz audio SCORE.musicxml` | Writes an MP3 of the band, `SCORE.mp3`, and one practice MP3 per part, `SCORE - PART.mp3`; with `--midi` the same as MIDI |
 
 Options of `render`:
 
@@ -125,6 +130,34 @@ color = "#D6001C"
 | `[theme] logo` | `XSATZ_LOGO` | `--logo` | Logo stamped into title block and running header, PNG or SVG. In an SVG, convert text to paths. Without a logo the PDF has none. |
 | `[theme] color` | `XSATZ_COLOR` | `--color` | Accent colour of the rules as `#RRGGBB`. Without it X-Satz takes the accent colour of the logo. |
 | | `MSCORE` | | Path to the MuseScore executable, when it is not found automatically |
+
+Without an `[audio]` section `xsatz audio` plays the score as written, with MuseScore's own
+SoundFont MS Basic and without a count-in. The section changes that:
+
+```toml
+[audio.transpose.brass]
+trumpet = -2              # every sound that starts with brass.trumpet, a whole tone lower
+
+[audio.sounds.brass]
+soundfont = "Sonatina_Symphonic_Orchestra"   # for every instrument of the family below
+trumpet.program = 27
+```
+
+| `x-satz.conf` | Meaning |
+|---|---|
+| `[audio] softer` | Decibels the other parts play softer in a practice file, 15 by default |
+| `[audio] reverb` | Share of every part sent to MuseScore's reverb, 0 to 1. MuseScore's default is 0.3. |
+| `[audio.count_in]` | A count-in "1 – 2 – 1 2 3 4" before the first bar, with `key` (General MIDI drum key) and `dynamic` |
+| `[audio.transpose.…]` | Semitones added to the sounding pitch, by MusicXML instrument sound. The most specific entry wins. |
+| `[audio] soundfont_dir` | MuseScore's SoundFont folder, needed for `swell` and `fade_in` |
+| `[audio.sounds.…]` | Sounds of the MP3s, by instrument sound: `soundfont` (file name without extension), `bank`, `program`, `swell` (samples start at that share of their level) and `fade_in` (longest fade-in in seconds). A family passes all but `program` on to its instruments. |
+| `[audio.sounds.parts."PART"]` | The same keys for one part, by part name |
+
+A SoundFont other than MS Basic has to be installed in MuseScore's SoundFont folder. When
+MuseScore does not find it, it plays MS Basic without a warning. For `swell` or `fade_in`
+X-Satz writes a shaped copy of the SF2 file into the SoundFont folder and plays the copy. The example file sets
+the playback that was worked out for a band with B flat brass, with the brass of the
+Sonatina Symphonic Orchestra (Creative Commons Sampling Plus 1.0).
 
 An unknown section or key in `x-satz.conf` stops X-Satz with an error, so a typo does not go
 unnoticed.

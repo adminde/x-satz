@@ -2,21 +2,26 @@
 
 Some layout needs elements that MusicXML cannot carry into MuseScore, such as a frame that
 exists on the first page only. They are added to MuseScore's own file after the import. The
-parts MuseScore extracts from the score get their style and title block here as well.
+parts MuseScore extracts from the score get their style and title block here as well, and the
+audio export gets its sounds and volumes (ADR 0010).
 """
 
 from __future__ import annotations
 
+import json
 import xml.etree.ElementTree as ET
 import zipfile
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from xsatz.sounds import Sound
 
 # Height of the frame and lowering of its text in staff spaces. With the score style this
 # puts the copyright line 5 mm above the bottom edge of the paper, inside the area that
 # common printers still print.
 FRAME_HEIGHT = "1"
 TEXT_OFFSET = "-0.2"
+AUDIO_SETTINGS = "audiosettings.json"
 
 
 def _read(mscz: Path) -> tuple[dict[str, bytes], str]:
@@ -439,3 +444,121 @@ def _offset(element: ET.Element, style: ET.Element, kind: str) -> tuple[float, f
     if offset is None:
         return 0.0, 0.0
     return float(offset.get("x", 0)), float(offset.get("y", 0))
+
+
+@dataclass(frozen=True)
+class AudioTrack:
+    """Sound, volume and reverb of one part in MuseScore's audio export.
+
+    Without a sound MuseScore chooses its own, without reverb it sends its default share.
+    """
+
+    sound: Sound | None = None
+    volume_db: float = 0.0
+    reverb: float | None = None
+
+
+def set_audio(mscz: str | Path, tracks: list[AudioTrack], master_db: float = 0.0) -> int:
+    """Write the mixer of ``mscz`` with one entry of ``tracks`` per part, in place (ADR 0010).
+
+    MuseScore keeps the mixer in ``audiosettings.json`` next to the score. Only the audio
+    export reads it, the MIDI export does not. A SoundFont is named by its file name without
+    extension and must be installed where MuseScore looks for SoundFonts. An unknown name
+    falls back to MuseScore's own SoundFont without a word. ``master_db`` is the volume of
+    the whole mix. Returns the number of parts set.
+    """
+    mscz = Path(mscz)
+    entries, name = _read(mscz)
+    score = ET.fromstring(entries[name]).find("Score")
+    parts = score.findall("Part") if score is not None else []
+    settings = json.loads(entries.get(AUDIO_SETTINGS, b"{}") or b"{}")
+    written = []
+    for part, track in zip(parts, tracks, strict=False):
+        instrument = part.find("Instrument")
+        entry = {
+            "instrumentId": instrument.get("id", "") if instrument is not None else "",
+            "partId": part.get("id", ""),
+        }
+        if track.sound is not None:
+            entry["in"] = {"resourceMeta": _resource(track.sound), "unitConfiguration": {}}
+        out: dict = {"volumeDb": track.volume_db, "balance": 0, "fxChain": {}}
+        if track.reverb is not None:
+            # The first auxiliary channel of MuseScore holds its reverb.
+            out["auxSends"] = [
+                {"active": True, "signalAmount": track.reverb},
+                {"active": True, "signalAmount": 0},
+            ]
+        entry["out"] = out
+        entry["soloMuteState"] = {"mute": False, "solo": False}
+        written.append(entry)
+    settings["tracks"] = written
+    settings.setdefault("master", {"balance": 0, "fxChain": {}})["volumeDb"] = master_db
+    entries[AUDIO_SETTINGS] = json.dumps(settings, indent=4).encode("utf-8")
+    _write(mscz, entries)
+    return len(written)
+
+
+def _resource(sound: Sound) -> dict:
+    attributes = {"soundFontName": sound.soundfont}
+    resource_id = sound.soundfont
+    if sound.program is not None:
+        # MuseScore names a single preset of a SoundFont as "name\\bank\\program".
+        resource_id = f"{sound.soundfont}\\{sound.bank}\\{sound.program}"
+        attributes |= {"presetBank": str(sound.bank), "presetProgram": str(sound.program)}
+    return {
+        "id": resource_id,
+        "type": "fluid_soundfont",
+        "vendor": "Fluid",
+        "hasNativeEditorSupport": False,
+        "attributes": attributes,
+    }
+
+
+def play_unisons_once(mscz: str | Path, front: int | None = None) -> int:
+    """Silence all but one part of every unison group of ``mscz``, in place (ADR 0010).
+
+    The groups are the colours ``xsatz.sounds.tag_unisons`` gave the notes. The part
+    ``front`` sounds where it is in a group, otherwise the first part of the group. A
+    silenced note keeps its place in the score and only does not play. Returns the number
+    of notes silenced.
+    """
+    mscz = Path(mscz)
+    entries, name = _read(mscz)
+    root = ET.fromstring(entries[name])
+    score = root.find("Score")
+    if score is None:
+        return 0
+    # The staves of the music are numbered from 1 through all parts in their order.
+    part_of = {}
+    for index, part in enumerate(score.findall("Part")):
+        for _ in part.findall("Staff"):
+            part_of[str(len(part_of) + 1)] = index
+    groups: dict[tuple[int, int, int], dict[int, list[ET.Element]]] = {}
+    for staff in score.findall("Staff"):
+        index = part_of.get(staff.get("id"))
+        if index is None:
+            continue
+        for note in staff.iter("Note"):
+            colour = note.find("color")
+            if colour is None:
+                continue
+            key = tuple(int(colour.get(c, "0")) for c in ("r", "g", "b"))
+            groups.setdefault(key, {}).setdefault(index, []).append(note)
+    silenced = 0
+    for members in groups.values():
+        if len(members) < 2:
+            continue
+        keep = front if front in members else min(members)
+        for index, notes in members.items():
+            if index == keep:
+                continue
+            for note in notes:
+                play = note.find("play")
+                if play is None:
+                    play = ET.SubElement(note, "play")
+                play.text = "0"
+                silenced += 1
+    if silenced:
+        entries[name] = ET.tostring(root, encoding="utf-8", xml_declaration=True)
+        _write(mscz, entries)
+    return silenced

@@ -82,9 +82,9 @@ def default_part_style() -> Path:
     return Path(str(resources.files("xsatz") / "styles" / "part.mss"))
 
 
-def part_file_name(stem: str, name: str) -> str:
+def part_file_name(stem: str, name: str, suffix: str = "pdf") -> str:
     """File name of the part ``name`` of the score ``stem``."""
-    return f"{stem} - {UNSAFE.sub('_', name).strip()}.pdf"
+    return f"{stem} - {UNSAFE.sub('_', name).strip()}.{suffix}"
 
 
 def render_parts(source: str | Path, out_dir: str | Path | None = None) -> PartsResult:
